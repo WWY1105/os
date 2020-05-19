@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!--[if lte IE 8]>
+  <script>window.location.href = '/upload.html';</script>
+  <![endif]-->
+  <!--[if lte IE 7]>
+  <script>window.location.href = '/upload.html';</script>
+  <![endif]-->
+  <!--[if lte IE 6]>
+  <script>window.location.href = '/upload.html';</script>
+  <![endif]-->
+  <meta charset="utf-8"/>
+  <title></title>
+  <link rel="stylesheet" href="/public/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/public/css/style.css"/>
+  <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/public/js/jqcookie.js"></script>
+</head>
+
+<body>
+<header></header>
+<div class="container">
+  <div class="col-md-2 left_menu"></div>
+  <div class="col-md-10 right_content">
+    <div class="col-md-12">
+      <ol class="breadcrumb">
+        <li>
+          <a href="/user/index.html">客户管理</a>
+        </li>
+        <li class="active">门店查看</li>
+      </ol>
+    </div>
+    <div class="col-md-12 results ">
+      <table class="table table-bordered result table-hover ">
+        <tr class="info">
+          <th width=20></th>
+          <th width=300>名称</th>
+          <th width=>地址</th>
+          <th width=80>状态</th>
+          <th width=80>操作</th>
+        </tr>
+        <tr class="show-modle" lt-repeat>
+          <td lt-model="guets.$index"></td>
+          <td lt-model="guets.name"></td>
+          <td lt-model="guets.address"></td>
+          <td lt-model="state[guets.state]"></td>
+          <td>
+            <a class="click zone" id="check" click="zone()"> <i class="glyphicon glyphicon-ok"></i> 审核
+            </a>
+            <a class="click zone" id="update" click="zone()"> <i class="glyphicon glyphicon-ok"></i> 修改
+            </a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="modal" id="dialog_edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">门店开通审核</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-horizontal col-md-12">
+          <div class="col-sm-12">
+            <div class="form-group  ">
+              <label class="col-sm-2  control-label text-right">
+                <div class="">名称</div>
+              </label>
+
+              <div class="col-sm-10 form-control-static " date="name"></div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group  ">
+              <label class="col-sm-4 control-label text-right">
+                <div class="">人均价格</div>
+              </label>
+
+              <div class="col-sm-8 form-control-static " date="avgprice"></div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group  ">
+              <label class="col-sm-4 control-label text-right">
+                <div class="">电话</div>
+              </label>
+
+              <div class="col-sm-8 form-control-static " date="tel"></div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group  ">
+              <label class="col-sm-4 control-label text-right">
+                <div class="">菜系</div>
+              </label>
+
+              <div class="col-sm-8 form-control-static" date="cuisineText"></div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group  ">
+              <label class="col-sm-4 control-label text-right">
+                <div class="">开业时间</div>
+              </label>
+
+              <div class="col-sm-8 form-control-static " date="openingDay"></div>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <div class="form-group  ">
+              <label class="col-sm-2 control-label text-right">
+                <div class="">地址</div>
+              </label>
+
+              <div class="col-sm-10 form-control-static " date="address"></div>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <div class="form-group ONLINE">
+              <label class="col-sm-2 control-label text-right">
+                <div class="">结算方式</div>
+              </label>
+
+              <div class="col-sm-10">
+                <div class="col-sm-8 form-control-static select-btn">
+                  <div class="form-group">
+                    <select class="form-control" name="ONLINE" date="settlementType">
+                      <option value="901">支持扫码与桌号付</option>
+                      <option value="902">只支持扫码</option>
+                      <option value="903">只能通过输入桌号主动买单</option>
+                      <option value="904">不使用上宾系统结算</option>
+                    </select>
+                  </div>
+                </div>
+                <!--<div class="row">-->
+                <!--<div class="col-sm-4">-->
+                <!--<div data-value="ONLY_OFFLINE" class="btn btn-default btn-block "><i-->
+                <!--class="glyphicon glyphicon-ok"></i> 无需ipad-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--<div class="col-sm-4">-->
+                <!--<div data-value="ONLINE_AND_OFFLINE" class="btn btn-default  btn-block this">-->
+                <!--<i class="glyphicon glyphicon-ok"></i> 需要ipad-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--<input name="ONLINE" type="hidden" value="ONLY_OFFLINE"/>-->
+                <!--</div>-->
+              </div>
+            </div>
+          </div>
+          <div id="area1" class="col-sm-8 form-control-static"></div>
+          <div class="col-sm-12">
+            <Div class=" form-group">
+              <label class="col-sm-2 control-label text-right">
+                <div class="">商圈</div>
+              </label>
+
+              <div class="col-sm-10">
+                <div class="row">
+                  <input name="area1" type="hidden" value=""/>
+
+                  <div class="col-sm-8">
+                    <select class="zone-select form-control" name="zone-select"></select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <div class="col-sm-10 col-sm-offset-2">
+              <div class="row">
+                <div class="col-sm-8">
+                  <div class="map-show"></div>
+                </div>
+                <div class="col-sm-4" style="padding-top:100px">
+                  <div class="btn btn-danger" id="coordinate">选择坐标</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary submit " id="shenheOK">审核通过</a>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade bs-example-modal-sm" id="map" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header ">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">选择地理位置</h4>
+      </div>
+      <div class="modal-body" id="mapin" style="height:400px"></div>
+      <div class="modal-footer">
+        <div class="col-md-3 col-md-offset-1">
+          <div class="btn btn-danger btn-block" id="resetMap">重新定位</div>
+        </div>
+        <div class="col-md-3 col-md-offset-1">
+          <div class="btn btn-danger btn-block" id="setpostion">确定</div>
+        </div>
+        <div class="col-md-3 col-md-setoff-1">
+          <div class="btn btn-default btn-block" data-dismiss="modal">关闭</div>
+        </div>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<div class="modal" id="dialog_edit2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">门店关闭审核</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-horizontal col-md-12">
+          <div class="col-sm-12">
+            <div class="form-group  ">
+              <label class="col-sm-2  control-label text-right">
+                <div class="">名称</div>
+              </label>
+
+              <div class="col-sm-10 form-control-static " date="name"></div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group  ">
+              <label class="col-sm-4 control-label text-right">
+                <div class="">人均价格</div>
+              </label>
+
+              <div class="col-sm-8 form-control-static " date="avgprice"></div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group  ">
+              <label class="col-sm-4 control-label text-right">
+                <div class="">电话</div>
+              </label>
+
+              <div class="col-sm-8 form-control-static " date="tel"></div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group  ">
+              <label class="col-sm-4 control-label text-right">
+                <div class="">菜系</div>
+              </label>
+
+              <div class="col-sm-8 form-control-static" date="cuisineText"></div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group  ">
+              <label class="col-sm-4 control-label text-right">
+                <div class="">开业时间</div>
+              </label>
+
+              <div class="col-sm-8 form-control-static " date="openingDay"></div>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <div class="form-group  ">
+              <label class="col-sm-2 control-label text-right">
+                <div class="">地址</div>
+              </label>
+
+              <div class="col-sm-10 form-control-static " date="address"></div>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <div class="form-group  ONLINE">
+              <label class="col-sm-2 control-label text-right">
+                <div class="">所在地区</div>
+              </label>
+
+              <div class="col-sm-4 form-control-static " date="areaText"></div>
+              <div class="col-sm-4 form-control-static " date="businessZoneText"></div>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <div class="col-sm-10 col-sm-offset-2">
+              <div class="row">
+                <div class="col-sm-8">
+                  <div class="map-show"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer ">
+        <a class="btn btn-primary submit " id="shenheOK2">确定</a>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" src="/public/js/main.js"></script>
+<script src="https://webapi.amap.com/maps?v=1.3&key=0afc3e67ea501df6fbedfcdbaa727df9"></script>
+<script type="text/javascript" src="/public/js/map.js"></script>
+<script type="text/javascript" src="/public/js/md5-min.js"></script>
+
+<script>
+  var zoneObj = {};
+  var view = {};
+  var data;
+  var ONLINE = {
+    ONLY_OFFLINE: "无需IPad",
+    ONLINE_AND_OFFLINE: "需要IPad"
+  }
+  var get_url = url2get();
+
+  function ltShowFn(a) {
+    var state = {
+      1001: "创建中",
+      1002: "认证审核中",
+      1003: "已认证",
+      1004: "关闭审核",
+      1005: "关闭"
+    }
+    var self = $("[lt-repeat]");
+    for (var i = 0, j = a.length; i < j; i++) {
+      var clonedNode = self.clone(true); // 克隆节点
+      clonedNode.removeAttr("lt-repeat");
+      var id = a[i].id;
+      a[i].$index = i + 1;
+      guets = a[i];
+      clonedNode.children("[lt-model]").each(function (index) {
+        $(this).text(eval($(this).attr("lt-model")) || "暂无");
+      });
+      if (guets.state != 1002 && guets.state != 1003) {
+        clonedNode.find(".zone").parent().html("");
+      } else if (guets.state == 1002) {
+        clonedNode.find("#update").hide();
+      } else {
+        clonedNode.find("#check").hide();
+      }
+      clonedNode.find("[click]").click(function () {
+        basicFn = $(this).attr("click");
+        indexId = $(this).parents(".show-modle").index();
+        ltFn(indexId, basicFn);
+      });
+      self.parent().append(clonedNode); // 在父节点插入克隆的节点
+    }
+    self.remove();
+  }
+
+  function ltFn(a, b) {
+    function zone() {
+      var bData = data.result[a - 1];
+      if (bData.state == 1002 || bData.state == 1003) {
+        view.latitude = bData.latitude;
+        view.longitude = bData.longitude;
+        view.areaText = bData.areaText;
+        view.area = bData.area;
+        //省市区
+        new add_option().area_son({}, "area1", view.area.substr(0, 2) + '0000');
+        $("#area1").html(view.areaText);
+        $("[name=area1]").val(view.area);
+        new add_option().zone({}, "zone-select", view.area);
+        $("[name=zone-select]").val(bData.businessZoneCode);
+        $("#shenheOK").html("确定修改");
+        $("#dialog_edit").find("[date]").each(function () {
+          key = $(this).attr("date");
+          key == "settlementType" ? $(this).val(bData[key]) : $(this).text(bData[key]);
+        });
+        $("#dialog_edit [name=zone]").html("");
+        mapShow(bData);
+        $("#coordinate").click(function () {
+          mapModal(bData);
+        });
+        $("#resetMap").click(function () {
+          mapModal(bData, 1);
+        });
+        $("#setpostion").click(function () {
+          mapShow(bData);
+          $("#map").modal("hide");
+        });
+        $("#shenheOK").click(function () {
+          zonValue = $("[name='zone-select']").val();
+          if (zonValue && view.latitude && view.longitude) {
+            var json = {
+              area: $("[name=area1]").val(),
+              latitude: view.latitude,
+              longitude: view.longitude,
+              zone: zonValue,
+              settlementType: $("[name=ONLINE]").val(),
+              guestId: bData.guestId
+            };
+            if (bData.state == 1002) {
+              re = ajax_send(json, "/shop/" + bData.id, "POST", 1);
+              if (re.code == 200) {
+                alert("审核通过");
+                location.reload(true)
+              }
+            }
+            else if (bData.state == 1003) {
+              re = ajax_send(json, "/shop/" + bData.id, "PUT", 1);
+              if (re.code == 200) {
+                alert("修改成功");
+                location.reload(true)
+              }
+            }
+          } else {
+            alert("商圈及地图必须选择");
+            return;
+          }
+        });
+        $("#dialog_edit").modal("show");
+
+      } else {
+        $("#dialog_edit2").find("[date]").each(function () {
+          key = $(this).attr("date");
+          $(this).text(bData[key])
+        });
+        mapShow(bData);
+        $("#dialog_edit2").off().on("click", "#shenheOK2", function () {
+          var re = ajax_send({}, "/shop/" + bData.id, "DELETE");
+          if (re.code == 200) {
+            alert("通过");
+            location.reload(true);
+          } else {
+            alert("失败,请重试");
+          }
+        });
+        $("#dialog_edit2").modal("show");
+      }
+    }
+
+    eval(b);
+  }
+  $(function () {
+    data = ajax_send({}, "/shop/guest/" + get_url.id, "GET");
+    if (data.result) {
+      ltShowFn(data.result);
+    } else {
+      $(".show-modle").html('<td colspan=5>暂无数据</td>')
+    }
+    ;
+//    $(".ONLINE ").on("click", ".btn", function () {
+//      $("input[name=ONLINE]").val($(this).attr("data-value"));
+//      $(".ONLINE .this").removeClass("this");
+//      $(this).addClass("this");
+//    });
+    $("[name=area1]").change(function () {
+      new add_option().zone({}, "zone-select", $("[name=area1]").val());
+    });
+  })
+</script>
+</body>
+
+</html>

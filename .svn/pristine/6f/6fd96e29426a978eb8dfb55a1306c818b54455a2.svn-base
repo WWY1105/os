@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8"/>
+  <title></title>
+  <link rel="stylesheet" href="/public/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/public/css/style.css"/>
+</head>
+
+<body>
+<header></header>
+<div class="container" style="overflow: hidden;">
+  <div class="col-md-2 left_menu"></div>
+  <div class="col-md-10 right_content">
+    <div class="col-md-12">
+      <ol class="breadcrumb">
+        <li>
+          <a href="/user/index.html">客户管理</a>
+        </li>
+        <li class="active">添加客户</li>
+      </ol>
+    </div>
+    <div class="col-md-12">
+      <ul class="add_step">
+        <li>基础资料</li>
+        <li>客户联系人</li>
+        <li>客户证件</li>
+        <li class="action">品牌信息</li>
+        <li>客户账号</li>
+      </ul>
+    </div>
+    <form>
+      <!--<input name="guestId" type="hidden"/>-->
+      <div class="col-md-12 ">
+        <div class="form-horizontal col-md-10 user_add">
+          <div class="form-group brandname">
+            <label class="col-sm-2 control-label text-right"><span class="important">*</span>客户品牌</label>
+
+            <div class="col-sm-4">
+              <input type="text" id="brand" class="form-control" placeholder="输入客户的品牌名称">
+            </div>
+            <div class="form-control-static  error_text col-sm-6">
+              2-20个字符
+            </div>
+          </div>
+          <div class="form-group slogan">
+            <label class="col-sm-2 control-label text-right"><span class="important">*</span>slogan</label>
+
+            <div class="col-sm-4">
+              <input type="text" id="slogan" class="form-control" placeholder="输入客户的品牌标语">
+            </div>
+            <div class="form-control-static  error_text col-sm-6">
+              2-20个字符
+            </div>
+          </div>
+          <div class="form-group  licencePic">
+            <label class="col-sm-2 control-label text-right" for="card"><span
+                    class="important">*</span>上传会员卡背景</label>
+
+            <div class="col-sm-4 picShow">
+              <div class="cardShow"><img src="/public/img/tem_upload.jpg" for="card"/></div>
+              <label class="btn btn-primary card PicChose btn-block" for="card">点击选择图片</label>
+            </div>
+            <div class="col-sm-6 form-control-static error-text">
+              支持jpg、jpeg格式
+              <br> 图片大小不大于5M。
+              <div class="licencePic-error-text"></div>
+              <input type="file" class="hidden" id="card" name="card" onchange="pic_check('card')">
+            </div>
+          </div>
+        </div>
+        <div class="form-horizontal col-md-10 user_add">
+          <div class="form-group  licencePic">
+            <label class="col-sm-2 control-label text-right" for="logo"><span
+                    class="important">*</span>上传品牌logo</label>
+
+            <div class="col-sm-4 picShow">
+              <div class="logoShow"><img src="/public/img/tem_upload.jpg" for="logo"/></div>
+              <label class="btn btn-primary logo PicChose btn-block" for="logo">点击选择图片</label>
+            </div>
+            <div class="col-sm-6 form-control-static error-text">
+              支持jpg、jpeg格式
+              <br> 图片大小不大于5M。
+              <div class="licencePic-error-text"></div>
+              <input type="file" class="hidden" id="logo" name="logo" onchange="pic_check('logo')">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-10 submite">
+          <div class="col-sm-2"></div>
+          <div class="col-sm-3">
+            <a class="btn btn-default btn-block" onclick="return_back()">上一步</a>
+          </div>
+          <div class="col-sm-3">
+            <button class="btn btn-primary btn-block">下一步</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- Button trigger modal -->
+<!-- Modal -->
+<script type="text/javascript" src="/public/js/jquery.min.js"></script>
+<script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/public/js/jquery.form.js"></script>
+<script type="text/javascript" src="/public/js/jqcookie.js"></script>
+<script type="text/javascript" src="/public/js/main.js"></script>
+<script type="text/javascript" src="/public/js/md5-min.js"></script>
+
+<script>
+  getUrl = url2get();
+  $(function () {
+    if (!getUrl.id) {
+      alert("您的操作不合法");
+      location.href = index_url + "/user/index.html";
+    } else {
+      get_guest = ajax_send({}, "/guest/" + getUrl.id + "/brand", "GET");
+      if (get_guest.result) {
+        get_guest.result.card && $(".cardShow img").attr("src", get_guest.result.card);
+        get_guest.result.logo && $(".logoShow img").attr("src", get_guest.result.logo);
+        $("#brand").val(get_guest.result.brand);
+        $("#slogan").val(get_guest.result.slogan);
+      }
+    }
+  });
+
+  function pic_check(pic) {
+    $("." + pic).text("已选择").addClass('btn-success').removeClass("btn-primary").removeClass("btn-error");
+  }
+  $("input[type=file]").change(function () {
+    var objUrl = getObjectURL(this.files[0]);
+    if (objUrl) {
+      imgShow = $(this).parent().parent().find("img");
+      imgShow.attr("src", objUrl);
+      imgShow.width("100%");
+    }
+  });
+  $('form').submit(function () {
+
+    if (!($("#card").val() && $("#logo").val())) {
+      alert("请先选择图片");
+      return false;
+    }
+    if (!($("#brand").val() && $("#slogan").val())) {
+      alert("请先填写信息");
+      return false;
+    }
+    POSTurl = basic_url + "/guest/" + getUrl.id + "/brand/pic?" + sortUrl();
+    options = {
+      url: POSTurl,
+      type: "POST",
+      success: function (data) {
+        if (data.code == 200) {
+          var json = {};
+          if (data.result.card)json.card = data.result.card;
+          if (data.result.logo)json.logo = data.result.logo;
+          json.brand = $("#brand").val();
+          json.slogan = $("#slogan").val();
+          var datas = ajax_send(json, "/guest/" + getUrl.id + "/brand", "POST");
+          if (datas.code == 200) {
+            location.href = index_url + "/user/add-5.html?id=" + getUrl.id;
+          } else alert(data.message);
+        } else { //
+          alert(data.message);
+        }
+      }
+    };
+    $(this).ajaxSubmit(options);
+
+    return false;
+  });
+
+  function return_back() {
+    location.href = index_url + "/user/add-3.html?id=" + getUrl.id;
+  }
+</script>
+</body>
+
+</html>

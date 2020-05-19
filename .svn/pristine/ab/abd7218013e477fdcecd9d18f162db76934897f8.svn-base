@@ -1,0 +1,104 @@
+<form class="row" enctype="multipart/form-data" ng-submit="postSend()" name="add_form" id="add_form">
+    <div class="col-md-12">
+        <div class="col-sm-10 form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-6 text-red col-sm-offset-2 ">*为必填项</div>
+            </div>
+            <div class="form-group">
+                <label for="product" class="col-sm-2 control-label text-right">
+                    <span class="text-red">*</span> 产品
+                </label>
+                <div class="col-sm-3" id="product">
+                    <select class="form-control" ng-model="posts.product" ng-options="item.key as item.name for item in view.products" required></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="platform" class="col-sm-2 control-label text-right">
+                    <span class="text-red">*</span> 平台
+                </label>
+                <div class="col-sm-3" id="platform">
+                    <select class="form-control" ng-model="posts.plateform" ng-options="item.key as item.name for item in view.platforms" required></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="platform" class="col-sm-2 control-label text-right">
+                    <span class="text-red">*</span> 渠道
+                </label>
+                <div class="col-sm-3" id="channel">
+                    <select class="form-control" ng-model="posts.channel" ng-options="item.key as item.name for item in view.channels" required></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="platform" class="col-sm-2 control-label text-right">
+                    <span class="text-red">*</span> 版本名
+                </label>
+                <div class="col-sm-9" id="code">
+                    <input style="width: 91px;float: left" type="number" min="1" class="form-control" ng-model="name1" required/><span style="float: left">.</span>
+                    <input style="width: 91px;float: left" type="number" min="0" class="form-control" ng-model="name2" required/><span style="float: left">.</span>
+                    <input style="width: 91px;float: left" type="number" min="0" class="form-control" ng-model="name3" required/><span style="float: left">.</span>
+                    <input style="width: 91px;float: left" type="number" min="0" class="form-control" ng-model="name4"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="platform" class="col-sm-2 control-label text-right">
+                    <span class="text-red">*</span> 版本号
+                </label>
+                <div class="col-sm-3">
+                    <input type="number" min="0" class="form-control" ng-model="posts.code" required/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="platform" class="col-sm-2 control-label text-right">
+                    <span class="text-red">*</span> 下载方式
+                </label>
+                <div class="col-sm-10" id="method">
+                    <label class="col-sm-3 radio-inline" ng-repeat="it in view.methods">
+                        <input type="radio" ng-model="view.downMethod" ng-value="it.id" />
+                        <span ng-bind="it.name"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="platform" class="col-sm-2 control-label text-right">
+                    <span class="text-red">*</span> 下载地址
+                </label>
+                <div class="animate-switch-container" ng-switch on="view.downMethod">
+                    <div class="animate-switch" ng-switch-default>
+                        <div class="form-group">
+                            <div class="col-sm-8" id="url">
+                                <input type="text" class="form-control" ng-model="posts.url" required/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="animate-switch" ng-switch-when="2">
+                        <div class="form-group">
+                            <div class="col-sm-8">
+                                <div class="form-group col-sm-5">
+                                    <input type="file" class="form-control-static" file-model="myFile" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="platform" class="col-sm-2 control-label text-right">
+                    <span class="text-red">*</span> 升级说明
+                </label>
+                <div class="col-sm-8">
+                    <textarea class="form-control" ng-model="posts.content"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-10 col-sm-offset-2">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <a class="btn btn-default btn-block" back-button>返回</a>
+                    </div>
+                    <div class="col-sm-3 col-sm-offset-1">
+                        <button class="btn btn-danger btn-block" ng-disabled="!add_form.$valid">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,227 @@
+<div class="contents bgw">
+    <div class="col-xs-12 text-right">
+            <button class="btn  btn-default btn-primary update" ng-click="addBtn()">新增</button>
+    </div>
+    <div class="view-slide-out">
+        <table class="table table-bordered table-striped text-center">
+            <thead>
+                <tr class="info">
+                    <th width="60">序号</th>
+                    <th>名称</th>
+                    <th>金币</th>                      
+                    <th>库存资源</th>
+                    <th>上架资源</th>
+                    <th>任务</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="message in view.messages.items">
+                    <td ng-bind="$index+1"></td>
+                    <td ng-bind="message.name"></td>
+                    <td ng-bind="message.amount"></td>
+                    <td ng-bind="message.percentage"></td>
+                    <td ng-bind="message.primaryRoyalty"></td>
+                    <td ng-bind="message.secondaryRoyalty"></td>  
+                    <td ng-bind="message.createTime"></td>                       
+                    <td><button class="btn  btn-default btn-primary update" ng-click="auditbtn(message)" ng-if="message.state != 'DISABLED'">修改</button><button class="btn  btn-default btn-primary update" ng-click="couponTurn(message.id,'on')" ng-if="message.state == 'CREATE'">启用</button><button class="btn  btn-default btn-primary update" ng-click="couponTurn(message.id,'off')" ng-if="message.state == 'ENABLED'">停用</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="accounts_model container" ng-if="addpop">
+        <div class="pop col-xs-6">
+            <div class="modal-header text-center popheader">
+                <button type="button" class="close" data-dismiss="modal" ng-click="closepop()">
+                    <span >&times;</span>
+                    <span class="sr-only" >Close</span>
+                </button>
+                <h4 class="modal-title">新增</h4>
+            </div>
+            <form>
+                <div class="form-group">
+                    <label >资源类型</label>
+                    <label>
+                        <input type="radio" ng-model="posts.mode" value="UNLOCK" name="proportion"  >立即兑换
+                    </label>
+                    <label>
+                        <input type="radio" ng-model="posts.mode" value="COIN_LOCK" name="proportion"  >任务直接发布
+                    </label>
+                    <label>
+                        <input type="radio" ng-model="posts.mode" value="TASK_LOCK" name="proportion"  >任务待激活
+                    </label>
+                    <label>
+                        <input type="radio" ng-model="posts.mode" value="PRE_RECHARGE" name="proportion"  >预充值
+                    </label>
+                </div>
+                <div>
+                    <div ng-if="posts.mode == 'UNLOCK'">立即兑换:直接充值金币,上架对应数量充值卡</div>
+                    <div ng-if="posts.mode == 'TASK_LOCK'">任务待激活:直接充值金币,任务待激活,领取不新增金币</div>
+                    <div ng-if="posts.mode == 'COIN_LOCK'">任务直接发布:直接发布任务,领取新增金币</div>
+                    <div ng-if="posts.mode == 'PRE_RECHARGE'">预充值:直接发布任务,领取不触发充值卡和赏金</div>
+                </div>
+                <div class="form-group">
+                    <label >名称</label>
+                    <input type="text" class="form-control" ng-model="posts.name"  placeholder="请输入名称">
+                </div>
+                <div class="form-group">
+                    <label >金币数量</label>
+                    <input type="text" class="form-control" ng-model="posts.amount"  placeholder="请输入名称">
+                </div>
+                <div class="form-group">
+                    <label >储值卡</label><button ng-click="addcardrow()" class="btn  btn-default btn-primary update">+</button>
+                    <div ng-repeat="card in posts.resources" class="col-xs-12 form-inline form-group" style="margin: 14px 0;">
+                        <div><span>标题</span><input type="text" style="width:80%;" ng-model="card.title"></div>
+                        <div><span>分账规则</span><select ng-model="card.allocateRuleUtilId" style="width:80%;" ng-options="item.id as item.name for item in allocates"name=""  ></select></div>
+                        <select ng-model="card.id" style="width:30%;" ng-options="item.id as item.name for item in resources"name=""  ></select>
+                        <input type="text" style="width:20%;" ng-model="card.count" > <span >张,每张</span> <input type="text" style="width:20%;" ng-model="card.cost" ><span >金币,售价</span><input type="number" style="width:20%;" ng-model="card.price" ><span >元,结算给商户</span>
+                        <input type="number" style="width:20%;" min="0" max="100" ng-model="card.celling" placeholder="百分比">
+                        <button ng-click="delcardrow($index)" class="btn  btn-default btn-primary update">删除</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label >任务</label><button ng-click="addtaskrow()" class="btn  btn-default btn-primary update">+</button>
+                    <div ng-repeat="task in posts.tasks" class="col-xs-12 form-inline form-group" style="margin: 14px 0;">
+                        <select ng-model="task.id" style="width:30%;"
+                        ng-options="item.id as item.name for item in tasks"
+                        name=""  ></select><input type="text" style="width:20%;"  ng-model="task.count" ><span >个,每次领取新增</span><input type="text" style="width:20%;"  ng-model="task.cost" ><span >个金币</span>
+                        <button ng-click="deltaskrow($index)" class="btn  btn-default btn-primary update">删除</button>
+                    </div>
+                </div>
+                <div>
+                    <div><a class="col-sm-3 btn btn-default" ng-click="openFn()">选择视频</a></div>
+                    
+                </div>
+                <div>
+                    <img ng-src="{{view.videos.cover}}" style="max-height: 100px">
+                    <div>{{view.videos.name}}</div>
+                </div>
+                <div class="form-group">
+                    <label >备注</label>
+                    <textarea type="text" class="form-control" ng-model="posts.descriptor"></textarea>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary" ng-click="submit()">提交</button>
+                </div>
+                                        
+            </form>
+        </div>
+    </div> 
+    <div class="accounts_model container" ng-if="eaitpop">
+            <div class="pop col-xs-6">
+                <div class="modal-header text-center popheader">
+                    <button type="button" class="close" data-dismiss="modal" ng-click="closepop()">
+                        <span >&times;</span>
+                        <span class="sr-only" >Close</span>
+                    </button>
+                    <h4 class="modal-title">修改</h4>
+                </div>
+                <form>
+                    <div class="form-group">
+                        <label >资源类型</label>
+                        <label>
+                            <input type="radio" ng-model="posts.mode" value="UNLOCK" name="proportion"  >立即兑换
+                        </label>
+                        <label>
+                            <input type="radio" ng-model="posts.mode" value="COIN_LOCK" name="proportion"  >任务直接发布
+                        </label>
+                        <label>
+                            <input type="radio" ng-model="posts.mode" value="TASK_LOCK" name="proportion"  >任务待激活
+                        </label>
+                        <label>
+                            <input type="radio" ng-model="posts.mode" value="PRE_RECHARGE" name="proportion"  >预充值
+                        </label>
+                    </div>
+                    <div>
+                        <div ng-if="posts.mode == 'UNLOCK'">立即兑换:直接充值金币,上架对应数量充值卡</div>
+                        <div ng-if="posts.mode == 'TASK_LOCK'">任务待激活:直接充值金币,任务待激活,领取不新增金币</div>
+                        <div ng-if="posts.mode == 'COIN_LOCK'">任务直接发布:直接发布任务,领取新增金币</div>
+                        <div ng-if="posts.mode == 'PRE_RECHARGE'">预充值:直接发布任务,领取不触发充值卡和赏金</div>
+                    </div>
+                    <div class="form-group">
+                        <label >名称</label>
+                        <input type="text" class="form-control" ng-model="posts.name"  placeholder="请输入名称">
+                    </div>
+                    <div class="form-group">
+                        <label >金币数量</label>
+                        <input type="text" class="form-control" ng-model="posts.amount"  placeholder="请输入名称" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label >储值卡</label><button ng-click="addcardrow()" class="btn  btn-default btn-primary update">+</button>
+                        <div ng-repeat="card in posts.resources" class="col-xs-12 form-inline form-group" style="margin: 14px 0;">
+                            <div><span>标题</span><input type="text" style="width:80%;" ng-model="card.title"></div>
+                            <div><span>分账规则</span><select ng-model="card.allocateRuleUtilId" style="width:80%;" ng-options="item.id as item.name for item in allocates"name=""  ></select></div>
+                            <select ng-model="card.id" style="width:30%;" ng-options="item.id as item.name for item in resources"name=""  ></select>
+                            <input type="text" style="width:20%;" ng-model="card.count" > <span >张,每张</span> <input type="text" style="width:20%;" ng-model="card.cost" ><span >金币,售价</span><input type="number" style="width:20%;" ng-model="card.price" ><span >元,结算给商户</span>
+                            <input type="number" style="width:20%;" min="0" max="100" ng-model="card.celling" placeholder="百分比">
+                            <button ng-click="delcardrow($index)" class="btn  btn-default btn-primary update">删除</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label >任务</label><button ng-click="addtaskrow()" class="btn  btn-default btn-primary update">+</button>
+                        <div ng-repeat="task in posts.tasks" class="col-xs-12 form-inline form-group" style="margin: 14px 0;">
+                            <select ng-model="task.id" style="width:30%;"
+                            ng-options="item.id as item.name for item in tasks"
+                            name=""  ></select><input type="text" style="width:20%;"  ng-model="task.count" ><span >个,每次领取新增</span><input type="text" style="width:20%;"  ng-model="task.cost" ><span >个金币</span>
+                            <button ng-click="deltaskrow($index)" class="btn  btn-default btn-primary update">删除</button>
+                        </div>
+                    </div>
+                    <div>
+                        <div><a class="col-sm-3 btn btn-default" ng-click="openFn()">选择视频</a></div>
+                        
+                    </div>
+                    <div>
+                        <img ng-src="{{view.videos.cover}}" style="max-height: 100px">
+                        <div>{{view.videos.name}}</div>
+                    </div>
+                    <div class="form-group">
+                        <label >备注</label>
+                        <textarea type="text" class="form-control" ng-model="posts.descriptor"></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary" ng-click="submit(posts.id)">提交</button>
+                    </div>
+                                            
+                </form>
+            </div>
+    </div> 
+
+    <div class="modal" id="vid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                  </button>
+                  <h4 class="modal-title" id="myModalLabel">选择视频</h4>
+                </div>
+                <div class="modal-body form-horizontal">
+                  <div class="form-group">
+                    <div class="col-sm-12" style="max-height: 260px;overflow: auto" ng-if="videos">
+                      <div class="selected_mask" ng-repeat="item in videos.items track by $index">
+                        <img ng-click="selectVid(item)" ng-src="{{item.cover}}">
+                        <div>{{item.name}}</div>
+                        <div ng-class="view.videos == item?'selected_mask_icon':''"></div>
+                      </div>
+                      <div ng-if="videos.pageSize>1">
+                        <pagination items-per-page="videos.count" boundary-links="true" total-items="videos.total"
+                                    ng-model="videos.page" class="pagination-sm" previous-text="&lsaquo;"
+                                    ng-change="picPageChange()"
+                                    next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+                        </pagination>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary click" ng-click="sendPicFn()">确认</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">返回</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+</div>

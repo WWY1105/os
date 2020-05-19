@@ -1,0 +1,340 @@
+
+<div class="contents bgw">
+    <div ng-bind="username"></div>
+    <div class="col-xs-12 text-right">
+        <button class="btn  btn-default btn-primary update" ng-click="addBtn()">新增</button>
+    </div>
+
+    <div class="view-slide-out">
+        <table class="table table-bordered table-striped text-center">
+            <thead>
+                <tr class="info">
+                    <th width="60">序号</th>
+                    <th>业务</th>
+                    <th>支付方式</th>
+                    <th>费率开始时间</th>  
+                    <th>费率结束时间</th> 
+                    <th>费率最低金额</th>
+                    <th>费率最高金额</th>                    
+                    <th>场景</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="message in view.messages.items">
+                    <td class="col-sm-1" ng-bind="((view.messages.page-1)*view.messages.count)+$index+1"></td>
+                    <td class="col-sm-2" ng-bind="filterfn(message.business)"></td>
+                    <td class="col-sm-2" ng-bind="paymentfilterfn(message.paymentMode)"></td>
+                    <td class="col-sm-2" ng-bind="message.createTime"></td>
+                    <td class="col-sm-2" ng-bind="message.endDate"></td>
+                    <td class="col-sm-1" ng-bind="message.maxAmount"></td>
+                    <td class="col-sm-1" ng-bind="message.minAmount"></td>
+                    <td class="col-sm-1" ng-bind="message.on? '线上':'线下'"></td>
+                    <!-- <td class="col-sm-3 text-left">
+                        <span ng-repeat="shops in message.shops" ng-bind="shops" style="margin-left:3%;width:44%;display: inline-block;vertical-align: top;"></span>
+                    </td>                        -->
+                    <td class="col-sm-2">
+                        <button class="btn  btn-default btn-primary update" ng-click="auditbtn(message)">修改</button>
+                        <button class="btn  btn-info btn-primary update" ng-click="online(message.id)">上线</button>
+                        <button class="btn  btn-info btn-primary update" ng-click="offline(message.id)">下线</button>
+                        <button class="btn  btn-danger btn-primary update" ng-click="del(message.id)">删除</button>
+                        
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="col-sm-8 " ng-if="view.messages.items">
+            <pagination items-per-page="view.messages.count" boundary-links="true" total-items="view.messages.total" ng-model="view.messages.page" class="pagination-sm" previous-text="&lsaquo;" ng-change="pageChange()" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+            </pagination>
+        </div>
+    </div>
+    <div class="accounts_model container" ng-if="showpop">
+        <div class="pop col-xs-10">
+            <div class="modal-header text-center popheader">
+                <button type="button" class="close" data-dismiss="modal" ng-click="closepop()">
+                    <span >&times;</span>
+                    <span class="sr-only" >Close</span>
+                </button>
+                <h4 class="modal-title">新增</h4>
+            </div>
+            <form class="form-horizontal">
+               
+                <div class="form-group col-sm-6" style="margin-top:20px;">
+                    <label  class="col-sm-3 control-label">业务</label>
+                    <div class="col-sm-9">
+                        <select ng-model="posts.business" class="form-control" ng-change="chanagebusiness()"
+                        ng-options="item.id as item.name for item in types" placeholder="请选择业务" ></select>
+                    </div>
+                </div>
+                <div class="form-group col-sm-6" style="margin-top:20px;" ng-if="set.unit">
+                    <label  class="col-sm-3 control-label">费率</label>
+                    <div class="col-sm-9">
+                        <div class="col-sm-12">
+                            <select ng-model="posts.allocateUnitId" class="form-control" 
+                            ng-options="item.id as item.name for item in set.unit" placeholder="请选择费率" ></select>
+                        </div>
+                    </div>
+                </div>
+               
+                <div class="form-group col-sm-6" style="margin-top:20px;">
+                    <label  class="col-sm-3 control-label">费率开始时间</label>
+                    <div class="col-sm-9">
+                        <input type="datetime-local" style="color: #18A0D4" ng-model="set.startDate" class="form-control"
+				placeholder="起始时间"
+				name="startTime"  required/>
+                    </div>
+                </div>
+                <div class="form-group col-sm-6" style="margin-top:20px;">
+                    <label  class="col-sm-3 control-label">费率结束时间</label>
+                    <div class="col-sm-9">
+                        <input type="datetime-local" style="color: #18A0D4" ng-model="set.endDate" class="form-control"
+				placeholder="结束时间"  name="endTime" required/>
+                    </div>
+                </div>
+                <div class="form-group col-sm-6" style="margin-top:20px;">
+                    <label  class="col-sm-3 control-label">费率最低金额</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" ng-model="posts.minAmount"  placeholder="请输入最低金额">
+                    </div>
+                </div>
+                <div class="form-group col-sm-6" style="margin-top:20px;">
+                    <label  class="col-sm-3 control-label">费率最高金额</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" ng-model="posts.maxAmount"  placeholder="请输入最高金额">
+                    </div>
+                </div>
+                <div class="form-group col-sm-12" style="margin-top:20px;">
+                    <label class="col-sm-1 control-label">规则</label>
+                    <div class="col-sm-11">
+                        <div class="col-sm-4">
+                            <div class="input-group">
+                                <span class="input-group-addon ">固定</span>
+                                <input type="text" class="form-control"  ng-model="posts.fixed"  placeholder="请输入分账固定金额">
+                                <span class="input-group-addon ">分</span>
+                            </div>
+                        </div> 
+                        <div class="col-sm-4" >
+                            <div class="input-group">
+                                <span class="input-group-addon ">万分之</span>
+                                <input type="text" class="form-control"  ng-model="posts.scale"  placeholder="请输入分账比例">
+                                <span class="input-group-addon ">万分比</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4" >
+                            <div class="input-group">
+                                <span class="input-group-addon ">上限</span>
+                                <input type="text" class="form-control"  ng-model="posts.limit"  placeholder="请输入分账金额封顶值">
+                                <span class="input-group-addon ">分</span>
+                            </div>
+                        </div>   
+                    </div>
+                                    
+                </div>
+
+                <div class="form-group col-sm-6" style="margin-top:20px;">
+                    <label  class="col-sm-3 control-label">支付方式</label>
+                    <!-- <div class="col-sm-9">
+                        <div class="col-sm-12">
+                            <select ng-model="posts.paymentMode" class="form-control"
+                            ng-options="item.id as item.name for item in paymentMode" placeholder="请选择支付方式" ></select>
+                        </div>
+                    </div> -->
+
+                    <div>
+                        <label class="checkbox-inline" ng-repeat="(key,item) in paymentModes" ng-class="{ml30:$index==0}">
+                            <input type="checkbox" ng-model="set.paymentModes[key]" ng-true-value="{{item.id}}">
+                            <span ng-bind="item.name"></span>
+                        </label>
+                        
+                    </div>
+                </div>
+
+                <div class="form-group col-sm-6" style="margin-top:20px;">
+                    <label class="col-sm-1 control-label">状态</label>
+                    
+                    <div class="col-sm-11">
+                        <label class="checkbox-inline">
+                            <input type="radio" ng-model="posts.on" value="true" name="on">上线
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="radio"  ng-model="posts.on" value="false" name="on">下线
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group" style="margin-top:20px;">
+                    <label class="col-sm-1 control-label">门店</label>
+                    <div class="col-sm-11">
+                        <div>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" ng-model="set.allShop" ng-change="checkAllShops()">全选
+                            </label>
+                        </div>
+                        <div>
+                            <label class="checkbox-inline" ng-repeat="(key,shops) in set.list" ng-class="{ml30:$index==0}">
+                                <input type="checkbox" ng-model="set.shops[key]" ng-true-value="{{shops.id}}"
+                                    ng-change="checkShops(set.shops[key])">
+                                <span ng-bind="shops.name"></span>
+                            </label>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group" style="margin-top:20px;">
+                    <label >描述</label>
+                    <textarea class="form-control" ng-model="posts.description" ></textarea>
+                </div>
+                <div class="text-center" style="margin-top:20px;">
+                    <button type="submit" class="btn btn-primary" ng-click="submit()">提交</button>
+                </div>
+                                        
+            </form>
+        </div>
+    </div> 
+
+    <div class="accounts_model container" ng-if="eaitpop">
+        <div class="pop col-xs-10">
+            <div class="modal-header text-center popheader">
+                <button type="button" class="close" data-dismiss="modal" ng-click="closepop()">
+                    <span >&times;</span>
+                    <span class="sr-only" >Close</span>
+                </button>
+                <h4 class="modal-title">修改</h4>
+            </div>
+            <form class="form-horizontal">
+               
+                <div class="form-group col-sm-6" style="margin-top:20px;">
+                    <label  class="col-sm-3 control-label">业务</label>
+                    <div class="col-sm-9">
+                        <select ng-model="edit.business" class="form-control" ng-change="chanagebusiness()"
+                        ng-options="item.id as item.name for item in types" placeholder="请选择业务" ></select>
+                    </div>
+                </div>
+                <div class="form-group col-sm-6" style="margin-top:20px;" ng-if="set.unit || edit.allocateUnitId">
+                    <label  class="col-sm-3 control-label">费率</label>
+                    <div class="col-sm-9">
+                        <div class="col-sm-12">
+                            <select ng-model="edit.allocateUnitId" class="form-control" 
+                            ng-options="item.id as item.name for item in set.unit" placeholder="请选择费率" ></select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group col-sm-6" style="margin-top:20px;">
+                    <label  class="col-sm-3 control-label">费率开始时间</label>
+                    <div class="col-sm-9">
+                        <input type="datetime-local" style="color: #18A0D4" ng-model="set.startDate" class="form-control"
+				placeholder="起始时间"
+				name="startTime"  required/>
+                    </div>
+                </div>
+                <div class="form-group col-sm-6" style="margin-top:20px;">
+                    <label  class="col-sm-3 control-label">费率结束时间</label>
+                    <div class="col-sm-9">
+                        <input type="datetime-local" style="color: #18A0D4" ng-model="set.endDate" class="form-control"
+				placeholder="结束时间"  name="endTime" required/>
+                    </div>
+                </div>
+                <div class="form-group col-sm-6" style="margin-top:20px;">
+                    <label  class="col-sm-3 control-label">费率最低金额</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" ng-model="edit.minAmount"  placeholder="请输入最低金额">
+                    </div>
+                </div>
+                <div class="form-group col-sm-6" style="margin-top:20px;">
+                    <label  class="col-sm-3 control-label">费率最高金额</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" ng-model="edit.maxAmount"  placeholder="请输入最高金额">
+                    </div>
+                </div>
+                <div class="form-group col-sm-12" style="margin-top:20px;">
+                    <label class="col-sm-1 control-label">规则</label>
+                    <div class="col-sm-11">
+                        <div class="col-sm-4">
+                            <div class="input-group">
+                                <span class="input-group-addon ">固定</span>
+                                <input type="text" class="form-control"  ng-model="edit.fixed"  placeholder="请输入分账固定金额">
+                                <span class="input-group-addon ">分</span>
+                            </div>
+                        </div> 
+                        <div class="col-sm-4" >
+                            <div class="input-group">
+                                <span class="input-group-addon ">万分之</span>
+                                <input type="text" class="form-control"  ng-model="edit.scale"  placeholder="请输入分账比例">
+                                <span class="input-group-addon ">万分比</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4" >
+                            <div class="input-group">
+                                <span class="input-group-addon ">上限</span>
+                                <input type="text" class="form-control"  ng-model="edit.limit"  placeholder="请输入分账金额封顶值">
+                                <span class="input-group-addon ">分</span>
+                            </div>
+                        </div>   
+                    </div>
+                                    
+                </div>
+
+                <div class="form-group col-sm-6" style="margin-top:20px;">
+                    <label  class="col-sm-3 control-label">支付方式</label>
+                    <!-- <div class="col-sm-9">
+                        <div class="col-sm-12">
+                            <select ng-model="edit.paymentMode" class="form-control"
+                            ng-options="item.id as item.name for item in paymentMode" placeholder="请选择支付方式" ></select>
+                        </div>
+                    </div> -->
+
+                    <div>
+                        <label class="checkbox-inline" ng-repeat="(key,item) in paymentModes" ng-class="{ml30:$index==0}">
+                            <input type="checkbox" ng-model="set.paymentModes[key]" ng-true-value="{{item.id}}">
+                            <span ng-bind="item.name"></span>
+                        </label>
+                        
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top:20px;">
+                    <label class="col-sm-1 control-label">状态</label>
+                    
+                    <div class="col-sm-11">
+                        <label class="checkbox-inline">
+                            <input type="radio" ng-model="edit.on" ng-value="true" name="on">上线
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="radio"  ng-model="edit.on" ng-value="false" name="on">下线
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group" style="margin-top:20px;">
+                    <label class="col-sm-1 control-label">门店</label>
+                    <div class="col-sm-11">
+                        <div>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" ng-model="set.allShop" ng-change="checkAllShops()">全选
+                            </label>
+                        </div>
+                        <div>
+                            <label class="checkbox-inline" ng-repeat="(key,shops) in set.list" ng-class="{ml30:$index==0}">
+                                <input type="checkbox" ng-model="set.shops[key]" ng-true-value="{{shops.id}}"
+                                    ng-change="checkShops(set.shops[key])">
+                                <span ng-bind="shops.name"></span>
+                            </label>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group" style="margin-top:20px;">
+                    <label >描述</label>
+                    <textarea class="form-control" ng-model="edit.description" ></textarea>
+                </div>
+                <div class="text-center" style="margin-top:20px;">
+                    <button type="submit" class="btn btn-primary" ng-click="audit()">提交</button>
+                </div>
+                                        
+            </form>
+        </div>
+    </div> 
+</div>

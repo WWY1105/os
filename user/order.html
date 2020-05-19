@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!--[if lte IE 8]>
+  <script>window.location.href = '/upload.html';</script>
+  <![endif]-->
+  <!--[if lte IE 7]>
+  <script>window.location.href = '/upload.html';</script>
+  <![endif]-->
+  <!--[if lte IE 6]>
+  <script>window.location.href = '/upload.html';</script>
+  <![endif]-->
+  <meta charset="utf-8"/>
+  <title></title>
+  <link rel="stylesheet" href="/public/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/public/css/style.css"/>
+  <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/public/js/jqcookie.js"></script>
+</head>
+
+<body>
+<header></header>
+<div class="container">
+  <div class="col-md-2 left_menu"></div>
+  <div class="col-md-10 right_content">
+    <div class="col-md-12">
+      <ol class="breadcrumb">
+        <li>
+          <a href="/user/index.html">客户管理</a>
+        </li>
+        <li class="active">坏账管理</li>
+      </ol>
+    </div>
+    <form class="form-inline time-search" name="searchData"  style="padding: 0"
+      ng-submit="searchFn()" >	
+      <div class="form-group">
+        <div class="input-group">
+          <div class="input-group-addon">订单类型</div>
+          <select class="form-control" name="state" ng-model="posts.state">
+            <option selected="selected" value="901">消费</option>
+            <option value="909">快速收款</option>
+            <option value="902">充值</option>
+            <option value="904">升级</option>
+          </select>
+        </div>
+
+      </div>
+      <div class="form-group"style="margin : 15px 0">
+        <label>时间：</label>
+        <input type="datetime-local" style="color: #18A0D4" ng-model="posts.startTime" class="form-control"
+            placeholder="起始时间"
+            name="startTime" max="{{posts.initTime}}" required/>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-default btn-primary" style="margin : 15px 0" ng-disabled="searchData.$invalid">筛选</button>
+      </div>
+    </form>
+    
+    <div class="col-md-12 results ">
+      <table class="table table-bordered result table-hover ">
+        <tr class="info">
+          <th width=20>序号</th>
+          <th width=200>订单号</th>
+          <th>金额</th>
+          <th>时间</th>
+          <th width=100>操作</th>
+        </tr>
+        <tr class="show-modle"  ng-repeat="message in posts.messages.items">
+          <td>1</td>
+          <td>21122</td>
+          <td>1543</td>
+          <td>165465</td>
+          <td>
+            <a class="click" id="check"> <i class="glyphicon glyphicon-ok"></i> 平帐
+            </a>
+          </td>
+        </tr>
+      </table>
+      
+    </div>
+  </div>
+</div>
+</div>
+
+<script type="text/javascript" src="/public/js/jquery.min.js"></script>
+<script type="text/javascript" src="/public/js/jquery.form.js"></script>
+<script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/public/angular/angular.js"></script>
+<script type="text/javascript" src="/public/js/jqcookie.js"></script>
+<script type="text/javascript" src="/public/angular/angular-route.min.js"></script>
+<script type="text/javascript" src="/public/angular/angular-messages.min.js"></script>
+<script type="text/javascript" src="/public/angular/angular-animate.min.js"></script>
+<script type="text/javascript" src="/public/angular/ui-bootstrap-min.js"></script>
+<script type="text/javascript" src="/public/js/main.js"></script>
+<script type="text/javascript" src="/public/js/version.js"></script>
+<script type="text/javascript" src="/public/js/md5-min.js" ></script>
+
+</body>
+
+</html>

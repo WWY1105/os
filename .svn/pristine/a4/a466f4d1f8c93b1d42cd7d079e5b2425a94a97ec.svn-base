@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8"/>
+  <title></title>
+  <link rel="stylesheet" href="/public/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/public/css/style.css"/>
+  <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<header></header>
+<div class="container" style="overflow: hidden;">
+  <div class="col-md-2 left_menu"></div>
+  <div class="col-md-10 right_content">
+    <div class="col-md-12">
+      <ol class="breadcrumb">
+        <li>
+          <a href="/user/index.html">客户管理</a>
+        </li>
+        <li class="active">修改客户</li>
+      </ol>
+    </div>
+    <div class="col-md-12">
+      <ul class="nav nav-tabs edit_step" role="tablist">
+        <li class="presentation">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+        <li class="presentation ">
+          <a href="edit-1.html">基础资料</a>
+        </li>
+        <li class="presentation">
+          <a href="edit-2.html">客户联系人</a>
+        </li>
+        <li class="presentation ">
+          <a href="edit-3.html">客户证件</a>
+        </li>
+        <li class="presentation  active">
+          <a href="edit-4.html">品牌视觉</a>
+        </li>
+        <li class="presentation  ">
+          <a href="edit-5.html">客户账号</a>
+        </li>
+      </ul>
+    </div>
+    <form class="">
+      <div class="col-md-12 ">
+        <div class="form-horizontal col-md-10 user_add">
+          <div class="form-group  licencePic">
+            <label class="col-sm-2 control-label text-right" for="pic">
+              <span class="important">*</span> 图片
+            </label>
+            <div class="col-sm-4 picShow">
+              <div class="legalPicShow">
+                <img src="/public/img/tem_upload.jpg" for="pic"/>
+              </div>
+              <label class="btn btn-primary pic PicChose btn-block" for="pic">点击选择图片</label>
+            </div>
+            <div class="col-sm-6 form-control-static error-text">
+              支持jpg、jpeg格式
+              <br> 图片大小不大于5M。
+              <div class="licencePic-error-text"></div>
+              <input type="file" class="hidden" id="pic" name="vipPic" onchange="pic_check('pic')">
+            </div>
+          </div>
+        </div>
+        <div class="form-horizontal col-md-10 user_add">
+          <div class="form-group  licencePic">
+            <label class="col-sm-2 control-label text-right" for="logo"><span
+                    class="important">*</span>上传品牌logo</label>
+            <div class="col-sm-4 picShow">
+              <div class="logoShow"><img src="/public/img/tem_upload.jpg" for="logo"/></div>
+              <label class="btn btn-primary logo PicChose btn-block" for="logo">点击选择图片</label>
+            </div>
+            <div class="col-sm-6 form-control-static error-text">
+              支持jpg、jpeg格式
+              <br> 图片大小不大于5M。
+              <div class="licencePic-error-text"></div>
+              <input type="file" class="hidden" id="logo" name="logo" onchange="pic_check('logo')">
+            </div>
+          </div>
+        </div>
+        <div class=" col-md-10 submite">
+          <div class="col-sm-2"></div>
+          <div class="col-sm-3">
+            <a class="btn btn-default btn-block call_back" href="/user/view-4.html">返回</a>
+          </div>
+          <div class="col-sm-3">
+            <button class="btn btn-primary btn-block">提交</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </Div>
+</div>
+<!-- Button trigger modal -->
+<!-- Modal -->
+</body>
+<script type="text/javascript" src="/public/js/jquery.form.js"></script>
+<script type="text/javascript" src="/public/js/jqcookie.js"></script>
+<script type="text/javascript" src="/public/js/main.js"></script>
+<script type="text/javascript" src="/public/js/md5-min.js"></script>
+<script>
+  getUrl = url2get();
+  $(function () {
+    $.each($(".edit_step a"), function (i, link) {
+      if (!link.href) {
+        return;
+      }
+      link.href = link.href + "?id=" + getUrl.id;
+    })
+    $(".call_back").attr("href", $(".call_back").attr("href") + "?id=" + getUrl.id);
+    if (getUrl.id) {
+      get_guest = ajax_send({}, "/guest/" + getUrl.id + "/pic", "GET");
+      if (get_guest.result) {
+        $("input[name=vipPic]").val();
+        get_guest.result.vipPic && $(".legalPicShow img").attr("src", get_guest.result.vipPic);
+        get_guest.result.logo && $(".logoShow img").attr("src", get_guest.result.logo);
+      }
+
+    } else {
+      alert("服务器繁忙");
+      location.href = index_url + "/user/index.html";
+    }
+
+  });
+
+  function pic_check(pic) {
+    $("." + pic).text("已选择").addClass('btn-success').removeClass("btn-primary").removeClass("btn-error");
+  }
+  $("input[type=file]").change(function () {
+
+    var objUrl = getObjectURL(this.files[0]);
+    if (objUrl) {
+      imgShow = $(this).parent().parent().find("img");
+      imgShow.attr("src", objUrl);
+      imgShow.width("100%");
+    }
+  });
+  $('form').submit(function () {
+    text_check = new text_check_new();
+    if (!text_check.pic_check()) {
+      return false
+    }
+    POSTurl = basic_url + "/guest/" + getUrl.id + "/pic?" + sortUrl();
+    options = {
+      url: POSTurl,
+      type: "POST",
+      success: function (data) {
+        if (data.code == 200) {
+          location.href = index_url + "/user/view-4.html?id=" + getUrl.id;
+        } else { //
+          alert("系统繁忙");
+        }
+      }
+
+    };
+    $(this).ajaxSubmit(options);
+
+    return false;
+  });
+
+  function return_back() {
+    location.href = index_url + "/user/add-3.html?id=" + getUrl.id;
+  }
+</script>
+</body>
+
+</html>

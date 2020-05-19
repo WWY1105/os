@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/public/css/style.css" />
+    <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/public/js/jqcookie.js"></script>
+</head>
+
+<body>
+    <header></header>
+    <div class="container" style="overflow: hidden;">
+        <div class="col-xs-2 left_menu"></div>
+        <div class="col-xs-10 right_content">
+            <div class="col-md-12">
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="/user/index.html">客户管理</a>
+                    </li>
+                    <li class="active">修改客户</li>
+                </ol>
+            </div>
+            <ul class="nav nav-tabs edit_step" role="tablist">
+                    <div id="username"></div>
+                <li class="presentation">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                <li class="presentation active">
+                    <a>基础资料</a>
+                </li>
+                <li class="presentation ">
+                    <a href="edit-2.html">客户联系人</a>
+                </li>
+                <li class="presentation ">
+                    <a href="edit-3.html">客户证件</a>
+                </li>
+                <li class="presentation  ">
+                    <a href="edit-4.html">品牌信息</a>
+                </li>
+                <li class="presentation ">
+                    <a href="edit-5.html">客户账号</a>
+                </li>
+            </ul>
+            <div calss="col-md-12">
+                <div class="col-md-10">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label for="" class="control-label col-sm-2"></label>
+                            <div class="col-sm-4 error"><span class="important">*</span>为必填项</div>
+                        </div>
+                        <div class="form-group nickname">
+                            <label class="col-sm-2 control-label text-right"><span class="important">*</span>名称</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="name" id="" class="form-control" placeholder="输入客户名称">
+                            </div>
+                            <div class="form-control-static  error_text col-sm-6">
+                                2-20个字符
+                            </div>
+                        </div>
+                        <div class="form-group industry">
+                            <label class="col-sm-2 control-label text-right"><span class="important">*</span>行业</label>
+                            <div class="col-sm-4 ">
+                                <select class="form-control" name="industry">
+                                    <option class="tem" value="0">
+                                        请选择
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-control-static error_text col-sm-6">
+                                请选择您所在的行业
+                            </div>
+                        </div>
+                        <div class="form-group telphone">
+                            <label class="col-sm-2 control-label text-right"><span class="important">*</span>固定电话</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="tel" id="" class="form-control" placeholder="输入电话号码">
+                            </div>
+                            <div class="form-control-static error_text col-sm-6">
+                                请输入固定电话号码
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div calss="col-md-12 ">
+                <Div class="form-horizontal col-md-10">
+                    <div class="form-group area ">
+                        <label class="col-sm-2 control-label text-right"><span class="important">*</span>地区</label>
+                        <div class="col-sm-9">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <select class="form-control " onchange="area_2()" name="area-1" data-container="body" data-toggle="popover" data-placement="top" data-content="请选择地区">
+                                        <option value="0">请选择</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-4">
+                                    <select class="form-control area-2" onchange="area_3()" name="area-2">
+                                    </select>
+                                </div>
+                                <div class="col-sm-4">
+                                    <select class="form-control area-3" name="area-3">
+                                    </select>
+                                </div>
+                                <div class="col-sm-12 error_text form-control-static">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group  address">
+                        <label class="col-sm-2 control-label text-right"><span class="important">*</span>详细地址</label>
+                        <div class="col-sm-9">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <input type="text" name="address" class="form-control" placeholder="请输入详细地址">
+                                </div>
+                                <div class="col-sm-12 error_text form-control-static "></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class=" col-md-10 submite">
+                    <div class="col-md-3">
+                    </div>
+                    <div class="col-md-3">
+                        <a class="btn call_back btn-default btn-block" href="/user/view-1.html">返回</a>
+                    </div>
+                    <div class="col-md-3">
+                        <a class="btn btn-primary btn-block" onclick="post_guest()">确定</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="/public/js/main.js"></script>
+<script type="text/javascript" src="/public/js/md5-min.js" ></script>
+
+<script>
+get_url = url2get();
+$('#username').text(decodeURI(get_url.name))
+$(function() {
+    get_industry = new add_option();
+    get_industry.industry({});
+    $(".area-2,.area-3").hide();
+    get_area = new add_option().area({}, "area-1");
+    $.each($(".edit_step a"), function(i, link) {
+        if (!link.href) {
+            return;
+        }
+        link.href = link.href + "?id=" + get_url.id;
+    })
+    $(".call_back").attr("href", $(".call_back").attr("href") + "?id=" + get_url.id);
+    if (get_url.id) {
+        get_guest = ajax_send({}, "/guest/" + get_url.id, "GET");
+        get_input_json = {
+            "input": {
+                "name": get_guest.result.name,
+                "description": get_guest.result.description,
+                "tel": get_guest.result.tel,
+                "address": get_guest.result.address,
+                "businessScope": get_guest.result.businessScope
+            },
+            "select": {
+                "area": get_guest.result.area,
+                "industry": get_guest.result.industry
+            }
+        };
+        for (var x in get_input_json.input) {
+            str = get_input_json.input[x];
+            $("input[name=" + x + "]").val(str);
+        };
+        area_str = get_input_json.select.area;
+        get_url_area1 = area_str.substr(0, 2);
+        get_url_area2 = area_str.substr(0, 4);
+        $("[name=area-1]").val(get_url_area1 + "0000");
+        area_2();
+        $("[name=area-2]").val(get_url_area2 + "00");
+        $("[name=area-3]").val(area_str);
+        $("[name=industry]").val(get_input_json.select.industry);
+    }
+
+})
+
+function area_2() {
+    area_1 = $("[name=area-1]").val();
+    if (area_1 == 0) {
+        $(".area-2,.area-3").hide();
+        $("[name=area-2],[name=area-3]").html("");
+        return;
+    }
+    get_industry = new add_option().area_son({}, "area-2", area_1);
+    area_3();
+    $(".area-2").show();
+}
+
+function area_3() {
+    area_1 = $("[name=area-2]").val();
+    get_industry = new add_option().area_son({}, "area-3", area_1);
+    $(".area-3").show();
+}
+
+function post_guest() {
+    $(".has-error").removeClass("has-error");
+    post_name_obj = $("[name=name]");
+    check = new text_check_new();
+    post_name = check.user_nickname_check(post_name_obj);
+//    post_brand_obj = $("[name=brand]");
+//    post_brand = check.user_nickname_check(post_brand_obj);
+    post_tel_obj = $("[name=tel]");
+    post_tel = check.telphone_check(post_tel_obj);
+    post_industry = $("[name=industry]").val() == 0 ? false : $("[name=industry]").val();
+    post_address_obj = $("[name=address]");
+    post_address = check.address_check(post_address_obj);
+    if (post_industry) {
+        $(".industry .has-error").removeClass("has-error");
+        $(".industry .text-danger").removeClass("text-danger").text("输入正确");
+    } else {
+        obj = $("[name=industry]");
+        obj.parent().addClass("has-error");
+        obj.parent().next(".error_text").addClass("text-danger").text("您没有选择行业");
+    }
+
+    post_area = $("[name=area-3]").val();
+
+    post_area1 = $("[name=area-1]").val();
+    post_area2 = $("[name=area-2]").val();
+    post_area3 = $("[name=area-3]").val();
+    post_area = post_area3 ? post_area3 : post_area2 ? post_area2 : post_area1;
+    /*
+    if(!post_area|| post_area==null){
+    	$(".area .row").addClass("has-error");
+    	$(".area .error_text").addClass("text-danger").text("请选择地区");
+    }else{
+    	$(".area .error_text").removeClass("text-danger").text("");
+    }*/
+
+    if (!post_area || !post_name || !post_industry || !post_tel || !post_address) {
+        return;
+    }
+    json = {
+        "id": get_url.id,
+        "name": post_name,
+//        "brandName": post_brand,
+        "area": post_area,
+        "industry": post_industry,
+        "tel": post_tel,
+        "address": post_address
+    };
+    for (var x in json) {
+        if (json[x] == "") {
+            delete json[x];
+        }
+    }
+    jsons = JSON.stringify(json);
+    data = ajax_send(jsons, "/guest", "PUT");
+    if (data.code == 200) {
+        alert("保存成功");
+        location.href = index_url + "/user/view-1.html?id=" + get_url.id;
+    }
+}
+</script>
+</body>
+
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/public/css/style.css" />
+    <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/public/js/jqcookie.js"></script>
+    <script type="text/javascript" src="/public/js/jquery.form.js"></script>
+    <script type="text/javascript" src="/public/js/md5-min.js"></script>
+
+</head>
+
+<body>
+    <header></header>
+    <div class="container" style="overflow: hidden;">
+        <div class="col-md-2 left_menu"></div>
+        <div class="col-md-10 right_content">
+            <div class="col-md-12">
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="/user/index.html">客户管理</a>
+                    </li>
+                    <li class="active">添加客户</li>
+                </ol>
+            </div>
+            <div class="col-md-12">
+                <ul class="add_step">
+                    <li>基础资料</li>
+                    <li>客户联系人</li>
+                    <li class="action">客户证件</li>
+                    <li>品牌视觉</li>
+                    <li>客户账号</li>
+                </ul>
+            </div>
+            <div calss="col-md-12 ">
+                <form class="form" method="post" role="form" enctype="multipart/form-data">
+                    <div class="form-horizontal col-md-10">
+                        <div class="form-group  ">
+                            <label for="inputEmail3" class="col-sm-2 control-label text-right"><span class="important">*</span>法人姓名</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="legalperson" />
+                            </div>
+                            <div class="error_text col-sm-4 control-label text-left">2-20个汉字、英文或数字，不允许空格</div>
+                        </div>
+                        <div class="form-group  ">
+                            <label for="inputEmail3" class="col-sm-2 control-label text-right"><span class="important">*</span>营业执照号</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="licenceNo" />
+                            </div>
+                            <div class="error_text col-sm-4 control-label text-left">0-30英文或数字，不允许空格</div>
+                        </div>
+                        <div class="form-group  licencePic">
+                            <label class="col-sm-2 control-label text-right" for="licencePic"><span class="important">*</span>营业执照图</label>
+                            <div class="col-sm-4 picShow">
+                                <div class="legalPicShow"><img src="/public/img/tem_upload.jpg" for="licencePic" /></div>
+                                <label class="btn btn-primary licencePicChose btn-block" for="licencePic">点击选择图片</label>
+                            </div>
+                            <div class="col-sm-6 form-control-static error-text">
+                                支持jpg、jpeg格式
+                                <br> 图片大小不大于5M。
+                                <div class="licencePic-error-text"></div>
+                                <input type="file" class="hidden" id="licencePic" name="licencePic" onchange="pic_check('licencePic')">
+                            </div>
+                        </div>
+                        <div class="form-group  legalPic">
+                            <label class="col-sm-2 control-label text-right"><span class="important">*</span>法人证件照</label>
+                            <div class="col-sm-4 picShow">
+                                <div class="legalPicShow"><img src="/public/img/tem_upload.jpg" /></div>
+                                <label class="btn btn-primary legalPicChose btn-block" for="legalPic">点击选择图片</label>
+                            </div>
+                            <div class="col-sm-6 form-control-static error-text">
+                                支持jpg、jpeg格式
+                                <br> 图片大小不大于5M。
+                                <div class="legalPic-error-text"></div>
+                                <input type="file" class="hidden" id="legalPic" name="legalPic" onchange="pic_check('legalPic')">
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" col-md-10 submite">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-3">
+                            <a class="btn btn-default btn-block" onclick="return_back()">上一步</a>
+                        </div>
+                        <div class="col-sm-3">
+                            <button class="btn btn-primary btn-block">下一步</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="/public/js/jquery.form.js"></script>
+    <script type="text/javascript" src="/public/js/main.js"></script>
+    <script type="text/javascript" src="/public/js/md5-min.js" ></script>
+
+    <script>
+    getUrl = url2get();
+    var sendFn = "POST";
+    $(function() {
+        if (!getUrl.id) {
+            alert("您的操作不合法");
+            location.href = index_url + "/user/index.html";
+        } else {
+            get_guest = ajax_send({}, "/guest/" + getUrl.id + "/certify", "GET");
+            if (get_guest.result) {
+                get_input_json = {
+                    "legalperson": get_guest.result.legalperson,
+                    "licenceNo": get_guest.result.licenceNo
+                };
+                for (var x in get_input_json) {
+                    str = get_input_json[x];
+                    $("input[name=" + x + "]").val(str);
+                };
+                $(".legalPicShow img").attr("src", get_guest.result.originalLegalpersonPicUrl);
+                $(".licencePicShow img").attr("src", get_guest.result.originalLicencePicUrl);
+                sendFn = "PUT";
+            }
+        }
+
+    });
+
+    function pic_check(pic) {
+        obj = $("." + pic + "Chose");
+        input = $("." + pic + " input");
+        if (!input.val() | input.val() !== "") {
+            obj.text("已选择").addClass('btn-success').removeClass("btn-primary").removeClass("btn-error");
+
+        } else {
+            obj.text("请选择图片").addClass('btn-error').removeClass("btn-primary").removeClass("btn-success");
+        }
+    }
+    $("input[type=file]").change(function() {
+        var objUrl = getObjectURL(this.files[0]);
+        if (objUrl) {
+            imgShow = $(this).parent().parent().find("img");
+            imgShow.attr("src", objUrl);
+            imgShow.width("100%");
+        }
+    });
+    $('form').submit(function() {
+        text_check = new text_check_new();
+        post_legalperson_obj = $("#legalperson");
+        post_legalperson = text_check.user_nickname_check(post_legalperson_obj);
+        post_licenceNo_obj = $("#licenceNo");
+        post_licenceNo = text_check.user_nickname_check(post_licenceNo_obj);
+        if (!post_licenceNo || !post_legalperson) return false;
+        if (sendFn == "POST") {
+            POSTurl = basic_url + "/guest/" + getUrl.id + "/certify/pic?" + sortUrl();
+        } else if (sendFn == "PUT") {
+            POSTurl = basic_url + "/guest/" + getUrl.id + "/certify/update";
+        } else {
+            return false;
+        }
+        options = {
+            url: POSTurl,
+            type: "POST",
+            success: function(data) {
+                if (data.code == 200) {
+                    var json = {};
+                    json.legalPicUrl = data.result.legalPicUrl;
+                    json.licencePicUrl = data.result.licencePicUrl;
+                    json.licenceNo = $("#licenceNo").val();
+                    json.legalpersonPicUrl = $("#legalperson").val();
+                    var datas = ajax_send(json, "/guest/" + getUrl.id + "/certify", "POST",1);
+                    if (datas.code == 200) {
+                      location.href = index_url + "/user/add-4.html?id=" + getUrl.id;
+                    } else alert(datas.message);
+//                    location.href = index_url + "/user/add-4.html?id=" + getUrl.id;
+                } else { //
+                    alert("系统繁忙");
+                }
+            }
+        };
+//        options = {
+//            url: basic_url + "/guest/" + get_url.id + "/certify/pic?" + sortUrl(),
+//            type: "POST",
+//            success: function (data) {
+//                if (data.code == 200) {
+//                    var json = {};
+//                    json.legalPicUrl = data.result.legalPicUrl;
+//                    json.licencePicUrl = data.result.licencePicUrl;
+//                    json.licenceNo = $("#licenceNo").val();
+//                    json.legalperson = $("#legalperson").val();
+//                    var datas = ajax_send(json, "/guest/" + get_url.id + "/certify/update", "POST");
+//                    if (datas.code == 200) {
+//                      location.href = index_url + "/user/add-4.html?id=" + getUrl.id;
+//                    } else alert(data.message);
+//
+//                } else alert(data.message);
+//            }
+//        };
+        $(this).ajaxSubmit(options);
+
+        return false;
+    });
+
+    function return_back() {
+        location.href = index_url + "/user/add-2.html?id=" + getUrl.id;
+    }
+    </script>
+</body>
+
+</html>

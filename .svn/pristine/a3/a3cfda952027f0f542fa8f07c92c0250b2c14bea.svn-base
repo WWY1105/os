@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<!--[if lte IE 8]><script>window.location.href='/upload.html';</script><![endif]-->
+<!--[if lte IE 7]><script>window.location.href='/upload.html';</script><![endif]-->
+<!--[if lte IE 6]><script>window.location.href='/upload.html';</script><![endif]-->
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>上宾运营管理系统</title>
+		<link rel="Shortcut Icon" href="favicon.ico"/>
+		<link rel="stylesheet" href="/public/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="/public/css/style.css" />
+	</head>
+	<body class="login_body">
+		<div id="login">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-3"></div>
+					<div class="col-md-3 split">
+						<img class="img" src="/public/img/login_logo.jpg"/>
+					</div>
+					<div class="col-md-3 ">
+						    <form class="form-horizontal"   id="login_form" >
+						    	  <label class="control-label form-error" ></label>
+							    <div class="form-group ">
+									 <div class="input-group">
+							          <div class="input-group-addon"><i class="glyphicon glyphicon-user"></i></div>
+							          <input class="form-control" type="text" name="name" placeholder="输入用户名">
+							        </div>
+								</div>
+							     <div class="form-group">
+									 <div class="input-group">
+							          <div class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></div>
+							          <input class="form-control" name="password" type="password" placeholder="输入密码">
+							        </div>
+								</div>
+								<div class="form-group">
+									 <button class="btn btn-login" >登录</button>
+								</div>
+						    </form>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<div id="footer">
+			<div class="container text-center">
+				&copy2015 上海先卓信息技术有限公司 All Right Reserved 沪ICP备1203652
+			</div>
+		</div>
+
+	<script type="text/javascript" src="/public/js/jquery.min.js" ></script>
+	<script type="text/javascript" src="/public/js/jqcookie.js" ></script>
+	<script type="text/javascript" src="/public/js/bootstrap.min.js" ></script>
+	<script type="text/javascript" src="/public/js/md5-min.js" ></script>
+	<script type="text/javascript" src="/public/js/module/login.js" ></script>
+	</body>
+</html>

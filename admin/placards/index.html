@@ -1,0 +1,38 @@
+<div>
+  <table class="table table-bordered result table-hover ">
+    <tr class="info">
+      <th>序号</th>
+      <th>名称</th>
+      <th>链接</th>
+      <th>图片-横图</th>
+      <th>图片-竖图</th>
+      <th>操作</th>
+    </tr>
+    <tr class="show-modle" ng-repeat="item in view.ads.items">
+      <td ng-bind="$index+1"></td>
+      <td ng-bind="item.title"></td>
+      <td ng-bind="item.linkUrl"></td>
+      <td><img style="height: 100px" ng-src="{{item.transversePicUrl}}"></td>
+      <td><img style="height: 100px" ng-src="{{item.verticalPicUrl}}"></td>
+      <td>
+        <a class="click" ng-click="editFn(item.id)"><i class="glyphicon glyphicon-edit"></i>修改</a>
+        <a class="click" ng-click="deleteFn(item.id,$index)"><i class="glyphicon glyphicon-remove"></i>删除</a>
+
+      </td>
+    </tr>
+    <tr ng-if="!view.ads.items">
+      <td colspan=6>暂无数据</td>
+    </tr>
+  </table>
+  <div class="col-sm-8 " ng-if="view.ads.items">
+    <pagination items-per-page="view.ads.count" boundary-links="true" total-items="view.ads.total"
+                ng-model="view.ads.page" class="pagination-sm" previous-text="&lsaquo;" ng-change="pageChange()"
+                next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+    </pagination>
+
+  </div>
+
+  <div class="col-sm-3">
+    <button class="btn btn-primary" ng-click="create()">新增广告</button>
+  </div>
+</div>

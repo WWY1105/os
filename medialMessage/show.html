@@ -1,0 +1,143 @@
+<div class="contents bgw">
+
+  <button class="btn btn-primary pull-right" ng-click="editFn()" style="margin-bottom: 20px;">新增消息</button>
+
+  <table class="table table-bordered table-striped text-center" ng-if="view.messages.items">
+    <thead>
+      <tr class="info">
+        <th>序号</th>
+        <th>类型</th>
+        <th>名称</th>
+        <th>描述</th>
+        <th>外链地址</th>
+        <th>页面</th>
+        <th>大图</th>
+        <th>小图</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="message in view.messages.items">
+        <td ng-bind="$index+1"></td>
+        <td ng-bind="view.type[message.type]"></td>
+        <td ng-bind="message.title"></td>
+        <td ng-bind="message.content"></td>
+        <td ng-bind="message.linkUrl"></td>
+        <td ng-bind="message.path"></td>
+        <td><img ng-src="{{message.picUrlMax}}"></td>
+        <td><img ng-src="{{message.picUrlMin}}"></td>
+        <td>
+          <a class="click del" ng-click="editFn($index)"><i class="glyphicon glyphicon-edit"></i>修改</a>
+          <!--<a class="click del" ng-click="deleteFn(message.id,$index)"><i class="glyphicon glyphicon-remove"></i>删除</a>-->
+        </td>
+
+      </tr>
+    </tbody>
+  </table>
+  <div class="col-sm-8 " ng-if="view.messages.items">
+    <pagination items-per-page="view.messages.count" boundary-links="true" total-items="view.messages.total"
+      ng-model="view.messages.page" class="pagination-sm" previous-text="&lsaquo;" ng-change="pageChange()"
+      next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+    </pagination>
+
+  </div>
+
+
+  <div class="modal" id="dialog_edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+          </button>
+          <h4 class="modal-title" id="myModalLabel">新增图片</h4>
+        </div>
+        <form class="form-horizontal" name="ruleForm" ng-submit="sendJsons()">
+          <div class="modal-body form-horizontal">
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label text-right">类型</label>
+
+              <div class="col-sm-5 ">
+                <select class="form-control" ng-model="post.type" name="area-1" data-container="body"
+                  data-toggle="popover" data-placement="top" data-content="请选择地区" required>
+                  <option ng-repeat="(key,value) in view.type" value="{{key}}">{{value}}</option>
+                </select>
+              </div>
+              <div class="has-error col-sm-4 form-control-static  error_text"></div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-3 control-label text-right">名称</label>
+
+              <div class="col-sm-5">
+                <input class="form-control" id="name" ng-model="post.title" type="text" required />
+              </div>
+              <div class="has-error col-sm-4 form-control-static  error_text"></div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-3 control-label text-right">描述</label>
+
+              <div class="col-sm-5">
+                <input class="form-control" ng-model="post.content" type="text" />
+              </div>
+              <div class="has-error col-sm-4 form-control-static  error_text"></div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-3 control-label text-right">外链地址</label>
+              <div class="col-sm-5">
+                <input class="form-control" ng-model="post.linkUrl" type="text" required />
+              </div>
+              <div class="has-error col-sm-4 form-control-static  error_text"></div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-3 control-label text-right">页面地址</label>
+              <div class="col-sm-5">
+                <input class="form-control" ng-model="post.path" type="text" required />
+              </div>
+              <div class="has-error col-sm-4 form-control-static  error_text"></div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-3 control-label text-right">大图片</label>
+              <div class="col-sm-9" style="max-height: 260px;overflow: auto" ng-if="view.urls">
+                <div class="selected_mask" ng-repeat="item in view.urls.items track by $index">
+                  <img ng-click="post.picUrlMax = item.url" ng-src="{{item.url}}">
+                  <div ng-class="post.picUrlMax == item.url?'selected_mask_icon':''"></div>
+                </div>
+                <div ng-if="view.urls.pageSize>1">
+                  <pagination items-per-page="view.urls.count" boundary-links="true" total-items="view.urls.total"
+                    ng-model="view.urls.page" class="pagination-sm" previous-text="&lsaquo;" ng-change="pageChange()"
+                    next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+                  </pagination>
+                </div>
+              </div>
+              <div class="has-error col-sm-4 form-control-static  error_text"></div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label text-right">小图片</label>
+              <div class="col-sm-9" style="max-height: 260px;overflow: auto" ng-if="view.urls">
+                <div class="selected_mask" ng-repeat="item in view.urls.items track by $index">
+                  <img ng-click="post.picUrlMin = item.url" ng-src="{{item.url}}">
+                  <div ng-class="post.picUrlMin == item.url?'selected_mask_icon':''"></div>
+                </div>
+                <div ng-if="view.urls.pageSize>1">
+                  <pagination items-per-page="view.urls.count" boundary-links="true" total-items="view.urls.total"
+                    ng-model="view.urls.page" class="pagination-sm" previous-text="&lsaquo;" ng-change="pageChange()"
+                    next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+                  </pagination>
+                </div>
+              </div>
+              <div class="has-error col-sm-4 form-control-static  error_text"></div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary click submit" ng-disabled="ruleForm.$invalid">确认</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">返回</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>

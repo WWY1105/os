@@ -1,0 +1,107 @@
+<div class="zone-show contents bgw">
+    <div class="col-sm-12" id="city-show">
+        <div class="row citylist">
+            <div class="col-sm-2" ng-class="$index==view.index?'active':''" ng-repeat="item in view.city"
+                ng-click="chooseFn($index)"><span>{{item.name}}</span></div>
+        </div>
+    </div>
+    <div class="col-sm-12" style="margin-top: 30px;">
+        <div>任务推广</div>
+        <div class="col-xs-12 text-right">
+                <button class="btn  btn-default btn-primary update" ng-click="addBtn()">新增</button>
+        </div>
+        <div class="view-slide-out">
+            <table class="table table-bordered table-striped text-center">
+                <thead>
+                    <tr class="info">
+                        <th>店铺</th>
+                        <th>权重</th>  
+                        <th>操作</th>                     
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="message in view.messages.items" ng-if="message.type == '1002'">
+                        <td ng-bind="message.shopName"></td>
+                        <td ng-bind="message.weight"></td>
+                        <td><button class="btn  btn-default btn-primary update" ng-click="deleteFn(message.id)">删除</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div>消费卡推广</div>
+        <div class="col-xs-12 text-right">
+                <button class="btn  btn-default btn-primary update" ng-click="addBtn()">新增</button>
+        </div>
+        <div class="view-slide-out">
+            <table class="table table-bordered table-striped text-center">
+                <thead>
+                    <tr class="info">
+                        <th>店铺</th>
+                        <th>权重</th> 
+                        <th>操作</th>                      
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="message in view.messages.items" ng-if="message.type == '1003'">
+                        <td ng-bind="message.shopName"></td>
+                        <td ng-bind="message.weight"></td>
+                        <td><button class="btn  btn-default btn-primary update" ng-click="deleteFn(message.id)">删除</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+
+        <!-- 分页 -->
+        <div class="col-sm-8 " ng-if="view.messages.items">
+            <pagination items-per-page="view.messages.count" boundary-links="true" total-items="view.messages.total" ng-model="view.messages.page" class="pagination-sm" previous-text="&lsaquo;" ng-change="pageChange()" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+            </pagination>
+        </div>
+    </div>
+
+    <div class="accounts_model container" ng-if="showpop">
+            <div class="pop col-xs-10">
+                <div class="modal-header text-center popheader">
+                    <button type="button" class="close" data-dismiss="modal" ng-click="closepop()">
+                        <span >&times;</span>
+                        <span class="sr-only" >Close</span>
+                    </button>
+                    <h4 class="modal-title">新增</h4>
+                </div>
+                <form class="form-horizontal">
+                    <div class="form-group col-sm-6" style="margin-top:20px;">
+                        <label  class="col-sm-3 control-label">类型</label>
+                        <div class="col-sm-9">
+                            <select ng-model="posts.type" class="form-control" 
+                            ng-options="item.id as item.name for item in types" placeholder="请选择类型" ></select>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6" style="margin-top:20px;">
+                        <label  class="col-sm-3 control-label">权重</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" ng-model="posts.weight"  placeholder="请输入1-100的整数">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group col-sm-12" style="margin-top:20px;">
+                        <div><label>门店</label></div>
+                        <div class="col-sm-12">
+                            <div>
+                                <label class="checkbox-inline" ng-repeat="(key,shops) in view.shops" ng-class="{ml30:$index==0}">
+                                    <input type="radio" name="radio" ng-model="posts.shopId" value="{{shops._id}}" >{{shops.brand}}({{shops.name}})
+                                </label>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center col-sm-12" style="margin-top:20px;">
+                        <button type="submit" class="btn btn-primary" ng-click="submitFn()">提交</button>
+                    </div>
+                                            
+                </form>
+            </div>
+        </div> 
+</div>

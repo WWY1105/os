@@ -1,0 +1,119 @@
+<div class="contents bgw">
+        <div class="col-xs-12 text-right">
+                <button class="btn  btn-default btn-primary update" ng-click="addBtn()">新增</button>
+        </div>
+        <div class="view-slide-out">
+            <table class="table table-bordered table-striped text-center">
+                <thead>
+                    <tr class="info">
+                        <th width="60">序号</th>
+                        <th>名称</th>
+                        <th>业务</th>
+                        <th>入账方编号</th>                      
+                        <th>银行名称</th>
+                        <th>卡号</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="message in view.messages.items">
+                        <td ng-bind="((view.messages.page-1)*view.messages.count)+$index+1"></td>
+                        <td ng-bind="message.name"></td>
+                        <td ng-bind="filterfn(message.type)"></td>
+                        <td ng-bind="message.accountIn"></td>
+                        <td ng-bind="message.bankName"></td>
+                        <td ng-bind="message.cardNo"></td>                       
+                        <td><button class="btn  btn-default btn-primary update" ng-click="auditbtn(message)">修改</button><button class="btn  btn-danger btn-primary update" ng-click="del(message.id)">删除</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="col-sm-8 " ng-if="view.messages.items">
+                <pagination items-per-page="view.messages.count" boundary-links="true" total-items="view.messages.total" ng-model="view.messages.page" class="pagination-sm" previous-text="&lsaquo;" ng-change="pageChange()" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+                </pagination>
+            </div>
+        </div>
+        <div class="accounts_model container" ng-if="showpop">
+            <div class="pop col-xs-6">
+                <div class="modal-header text-center popheader">
+                    <button type="button" class="close" data-dismiss="modal" ng-click="closepop()">
+                        <span >&times;</span>
+                        <span class="sr-only" >Close</span>
+                    </button>
+                    <h4 class="modal-title">新增</h4>
+                </div>
+                <form>
+                    <div class="form-group">
+                        <label >名称</label>
+                        <input type="text" class="form-control" ng-model="posts.name"  placeholder="请输入名称">
+                    </div>
+                    <div class="form-group">
+                        <label >业务</label>
+                        <select ng-model="posts.type" class="form-control"
+                        ng-options="item.code as item.text for item in types" placeholder="请选择业务" ></select>
+                    </div>
+                    <div class="form-group">
+                        <label >入账方编号</label>
+                        <input type="text" class="form-control" ng-model="posts.accountIn"  placeholder="请输入入账方编号">
+                    </div>
+                    <div class="form-group">
+                        <label >银行</label>
+                        <input type="text" class="form-control" ng-model="posts.bankName"  placeholder="请输入银行">
+                    </div>
+                    <div class="form-group">
+                        <label >卡号</label>
+                        <input type="text" class="form-control" ng-model="posts.cardNo" placeholder="请输入卡号">
+                    </div>
+                    <div class="form-group">
+                        <label >描述</label>
+                        <textarea class="form-control" ng-model="posts.desc" ></textarea>
+                        </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary" ng-click="submit()">提交</button>
+                    </div>
+                                            
+                </form>
+            </div>
+        </div> 
+        <div class="accounts_model container" ng-if="eaitpop">
+                <div class="pop col-xs-6">
+                    <div class="modal-header text-center popheader">
+                        <button type="button" class="close" data-dismiss="modal" ng-click="closepop()">
+                            <span >&times;</span>
+                            <span class="sr-only" >Close</span>
+                        </button>
+                        <h4 class="modal-title">修改</h4>
+                    </div>
+                    <form>
+                        <div class="form-group">
+                            <label >名称</label>
+                            <input type="text" class="form-control" ng-model="edit.name"  placeholder="请输入名称">
+                        </div>
+                        <div class="form-group">
+                            <label >业务</label>
+                            <select ng-model="edit.type" class="form-control"
+                            ng-options="item.code as item.text for item in types" placeholder="请选择业务" ></select>
+                        </div>
+                        <div class="form-group">
+                            <label >商户号</label>
+                            <input type="text" class="form-control" ng-model="edit.mchId"  placeholder="请输入商户号">
+                        </div>
+                        <div class="form-group">
+                            <label >银行</label>
+                            <input type="text" class="form-control" ng-model="edit.bankName"  placeholder="请输入银行">
+                        </div>
+                        <div class="form-group">
+                            <label >卡号</label>
+                            <input type="text" class="form-control" ng-model="edit.cardNo" placeholder="请输入卡号">
+                        </div>
+                        <div class="form-group">
+                            <label >描述</label>
+                            <textarea class="form-control" ng-model="edit.desc" ></textarea>
+                            </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary" ng-click="audit()">保存</button>
+                        </div>
+                                                
+                    </form>
+                </div>
+            </div>
+</div>

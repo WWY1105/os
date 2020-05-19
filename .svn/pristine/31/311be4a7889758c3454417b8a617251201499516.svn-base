@@ -1,0 +1,70 @@
+<div class="contents bgw">
+	<form class="form-inline time-search" name="searchData"
+		ng-submit="searchFn()" >
+		<div class="form-group"style="margin-bottom : 15px">
+		<label>时间：</label>
+		<input type="datetime-local" style="color: #18A0D4" ng-model="posts.startTime" class="form-control"
+				placeholder="起始时间"
+				name="startTime" max="{{view.initTime}}" required/>
+		~
+		<input type="datetime-local" style="color: #18A0D4" ng-model="posts.endTime" class="form-control"
+				placeholder="结束时间" max="{{view.initTime}}" name="endTime" required/>
+		</div>
+		<div class="form-group">
+		<button class="btn btn-default btn-primary" style="margin-bottom : 15px" ng-disabled="searchData.$invalid">筛选</button>
+		</div>
+	</form>
+	<table class="table table-bordered table-striped text-center">
+		<thead>
+			<tr class="info">
+				<td>序号</td>
+				<td>门店</td>
+				<td>微信(元/笔数）</td>
+				<td>支付宝(元/笔数）</td>
+				<td>刷卡(元/笔数）</td>
+				<td>现金(元/笔数）</td>
+				<td style="font-size: 14px;font-weight: 700">总计(元/笔数）</td>
+			</tr>
+		</thead>
+		<tbody >
+			<tr ng-repeat="row in view.messages.items"  ng-if="view.messages.items">
+				<td  ng-bind="((view.messages.page-1)*view.messages.count)+$index+1"></td>
+				<td width="15%" ng-bind="row.brand"></td>
+				<td width="15%">
+					<div ng-if="row.channels[1005]">￥{{row.channels[1005].amount}}
+							/{{row.channels[1005].count}}</div>	
+					<div ng-if="!row.channels[1005]">0</div></td>
+				<td width="15%" >
+					<div ng-if="row.channels[1101]">￥{{row.channels[1101].amount}}
+							/{{row.channels[1101].count}}</div>	
+					<div ng-if="!row.channels[1101]">0</div></td>
+				<td width="15%">
+					<div ng-if="row.channels[1000]">￥{{row.channels[1000].amount}}
+							/{{row.channels[1000].count}}</div>	
+					<div ng-if="!row.channels[1000]">0</div></td>
+				<td width="15%">
+					<div ng-if="row.channels[1001]">￥{{row.channels[1001].amount}}
+							/{{row.channels[1001].count}}</div>	
+					<div ng-if="!row.channels[1001]">0</div></td>
+				<td ng-bind="'￥'+ row.amount +'/'+row.count"></td>
+			</tr>
+			<tr ng-if="view.messages==null">
+				<td colspan="7">没有找到满足条件的数据</td>
+			</tr>
+			
+		</tbody>
+	</table>
+	<div class="col-sm-8 " ng-if="view.messages.items">
+		<pagination items-per-page="view.messages.count" boundary-links="true" total-items="view.messages.total" ng-model="view.messages.page" class="pagination-sm" previous-text="&lsaquo;" ng-change="pageChange()" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+		</pagination>
+    </div>
+	<div id="loadingDiv" style="width:100%;height:100%;position: absolute;z-index: 5000;display: none;text-align: center;">
+		<div style="border: 1px solid #4083c2;width:200px;padding-left:5px;line-height: 100px;height: 100px;top:30%;margin-top: -15px;left:50%;margin-left: -45px;position: fixed;background-color: #ffffff;">
+			<div style="width:50px;padding-top: 5px;display: inline-block;margin-right: 15px;"><img src="../public/img/login.gif" style="width:40px;height: 40px;"></div>
+			<div style="font-size:14pt;display: inline-block;">查询中...</div>
+		</div>
+	</div>
+    <!-- <div class="col-sm-3">
+		<button class="btn btn-primary" ng-click="create()">新增消息</button>
+	</div> -->
+</div>

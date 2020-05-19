@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+    <!--[if lte IE 8]><script>window.location.href='/upload.html';</script><![endif]-->
+    <!--[if lte IE 7]><script>window.location.href='/upload.html';</script><![endif]-->
+    <!--[if lte IE 6]><script>window.location.href='/upload.html';</script><![endif]-->
+    <meta charset="utf-8" />
+    <title>消息管理</title>
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/public/css/style.css" />
+</head>
+
+<body>
+    <header></header>
+    <div class="container">
+        <div class="col-xs-2 left_menu"></div>
+        <div class="col-xs-10 right_content">
+            <div class="col-xs-12">
+                <ol class="breadcrumb">
+                    <li class="active">
+                        <a href="/allocate/index.html#/allocate">分账管理</a>
+                    </li>
+                    <li>浏览</li>
+                </ol>
+            </div>
+            <div class="view-slide-out">
+                <div ng-view class="view-slide-in">
+                </div>
+            </div>
+        </div>
+       
+          </div>
+    </div>
+    <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/public/js/jquery.form.js"></script>
+    <script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/public/angular/angular.js"></script>
+    <script type="text/javascript" src="/public/js/jqcookie.js"></script>
+    <script type="text/javascript" src="/public/angular/angular-route.min.js"></script>
+    <script type="text/javascript" src="/public/angular/angular-messages.min.js"></script>
+    <script type="text/javascript" src="/public/angular/angular-animate.min.js"></script>
+    <script type="text/javascript" src="/public/angular/ui-bootstrap-min.js"></script>
+    <script type="text/javascript" src="/public/js/main.js"></script>
+    <script type="text/javascript" src="/public/js/version.js"></script>
+    <script type="text/javascript" src="/public/js/md5-min.js" ></script>
+    <script>
+        $("input[type=file]").change(function () {
+            var objUrl = getObjectURL(this.files[0]);
+            if (objUrl) {
+                imgShow = $(this).parent().parent().find("img");
+                imgShow.attr("src", objUrl);
+                imgShow.width("100%");
+            }
+        });
+        function pic_check(pic) {
+            obj = $("." + pic + "Chose");
+            input = $("." + pic + " input");
+            if (!input.val() || input.val() !== "") {
+                obj.text("已选择").addClass('btn-success').removeClass("btn-primary").removeClass("btn-error");
+
+            } else {
+                obj.text("请选择图片").addClass('btn-error').removeClass("btn-primary").removeClass("btn-success");
+            }
+        }
+        
+    </script>
+</body>
+
+</html>

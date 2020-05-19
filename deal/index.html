@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+    <!--[if lte IE 8]><script>window.location.href='/upload.html';</script><![endif]-->
+    <!--[if lte IE 7]><script>window.location.href='/upload.html';</script><![endif]-->
+    <!--[if lte IE 6]><script>window.location.href='/upload.html';</script><![endif]-->
+    <meta charset="utf-8" />
+    <title>消息管理</title>
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/public/css/style.css" />
+</head>
+
+<body>
+    <header></header>
+    <div class="container">
+        <div class="col-xs-2 left_menu"></div>
+        <div class="col-xs-10 right_content">
+            <div class="col-md-12">
+                <ol class="breadcrumb">
+                    <li class="active">
+                        <a href="/deal/index.html#">客户交易</a>
+                    </li>
+                    <li>浏览</li>
+                </ol>
+            </div>
+            <div class="view-slide-out">
+                <div ng-view class="view-slide-in">
+                  <!-- <div class="contents bgw">
+                    <table class="table table-bordered table-striped text-center" ng-if="view.messages.items">
+                      <thead>
+                        <tr class="info">
+                          <th>序号</th>
+                          <th>标题</th>
+                          <th>内容</th>
+                          <th>创建时间</th>
+                          <th>操作</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr ng-repeat="message in view.messages.items">
+                          <td ng-bind="$index+1"></td>
+                          <td width="20%" ng-bind="message.title"></td>
+                          <td align="left" width="55%" style="word-break:break-all;" ng-bind="message.content"></td>
+                          <td ng-bind="message.createTime|date:'yyyy-MM-dd HH:mm:ss'"></td>
+                          <td> <button ng-click="delete(message.id)">删除</button> </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div class="col-sm-8 " ng-if="view.messages.items">
+                            <pagination items-per-page="view.messages.count" boundary-links="true" total-items="view.messages.total" ng-model="view.messages.page" class="pagination-sm" previous-text="&lsaquo;" ng-change="pageChange()" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+                            </pagination>
+                
+                    </div>
+                  
+                      <div class="col-sm-3">
+                        <button class="btn btn-primary" ng-click="create()">新增消息</button>
+                      </div> -->
+                  <!-- </div> --> 
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/public/angular/angular.js"></script>
+    <script type="text/javascript" src="/public/js/jqcookie.js"></script>
+    <script type="text/javascript" src="/public/angular/angular-route.min.js"></script>
+    <script type="text/javascript" src="/public/angular/angular-messages.min.js"></script>
+    <script type="text/javascript" src="/public/angular/angular-animate.min.js"></script>
+    <script type="text/javascript" src="/public/angular/ui-bootstrap-min.js"></script>
+    <script type="text/javascript" src="/public/js/main.js"></script>
+    <script type="text/javascript" src="/public/js/version.js"></script>
+    <script type="text/javascript" src="/public/js/md5-min.js" ></script>
+
+</body>
+
+</html>

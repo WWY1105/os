@@ -1,0 +1,177 @@
+<div class="contents bgw">
+    <div class="col-xs-12 text-right">
+            <button class="btn  btn-default btn-primary update" ng-click="addBtn()">新增</button>
+    </div>
+    <div class="view-slide-out">
+        <table class="table table-bordered table-striped text-center">
+            <thead>
+                <tr class="info">
+                    <th width="60">序号</th>
+                    <th>名称</th>
+                    <th>级别</th>                      
+                    <th>自身任务</th>
+                    <th>一级抽成</th>
+                    <th>二级抽成</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="message in view.messages">
+                    <td ng-bind="$index+1"></td>
+                    <td ng-bind="message.name"></td>
+                    <td ng-bind="message.grade"></td>
+                    <td ng-bind="message.percentage"></td>
+                    <td ng-bind="message.primaryRoyalty"></td>
+                    <td ng-bind="message.secondaryRoyalty"></td>  
+                    <td ng-bind="message.createTime"></td>                       
+                    <td><button class="btn  btn-default btn-primary update" ng-click="auditbtn(message)">修改</button><button class="btn  btn-default btn-primary update" ng-click="getCode(message.id)">邀请码</button><button class="btn  btn-default btn-primary update" ng-click="getroyalty(message.id)">抽成比例</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="col-sm-8 " ng-if="view.messages">
+            <pagination items-per-page="view.messages.count" boundary-links="true" total-items="view.messages.total" ng-model="view.messages.page" class="pagination-sm" previous-text="&lsaquo;" ng-change="pageChange()" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+            </pagination>
+        </div>
+    </div>
+    <div class="accounts_model container" ng-if="showpop">
+        <div class="pop col-xs-6">
+            <div class="modal-header text-center popheader">
+                <button type="button" class="close" data-dismiss="modal" ng-click="closepop()">
+                    <span >&times;</span>
+                    <span class="sr-only" >Close</span>
+                </button>
+                <h4 class="modal-title">新增</h4>
+            </div>
+            <form>
+                <div class="form-group">
+                    <label >名称</label>
+                    <input type="text" class="form-control" ng-model="posts.name"  placeholder="请输入名称">
+                </div>
+                <div class="form-group">
+                    <label >级别</label>
+                    <select ng-model="posts.grade" class="form-control"
+                    ng-options="item.id as item.name for item in types" placeholder="请选择级别" ></select>
+                </div>
+                <div class="form-group">
+                    <label >完成任务百分比</label>
+                    <input type="text" class="form-control" ng-model="posts.percentage"  placeholder="1-100">
+                </div>
+                <div class="form-group">
+                    <label >一级抽成百分比</label>
+                    <input type="text" class="form-control" ng-model="posts.primaryRoyalty"  placeholder="0-100">
+                </div>
+                <div class="form-group">
+                    <label >二级抽成百分比</label>
+                    <input type="text" class="form-control" ng-model="posts.secondaryRoyalty" placeholder="0-100">
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary" ng-click="submit()">提交</button>
+                </div>
+                                        
+            </form>
+        </div>
+    </div> 
+    <div class="accounts_model container" ng-if="eaitpop">
+            <div class="pop col-xs-6">
+                <div class="modal-header text-center popheader">
+                    <button type="button" class="close" data-dismiss="modal" ng-click="closepop()">
+                        <span >&times;</span>
+                        <span class="sr-only" >Close</span>
+                    </button>
+                    <h4 class="modal-title">修改</h4>
+                </div>
+                <form>
+                    <div class="form-group">
+                        <label >名称</label>
+                        <input type="text" class="form-control" ng-model="edit.name"  placeholder="请输入名称">
+                    </div>
+                    <div class="form-group">
+                        <label >级别</label>
+                        <select ng-model="edit.grade" class="form-control"
+                        ng-options="item.id as item.name for item in types" placeholder="请选择级别" ></select>
+                    </div>
+                    <div class="form-group">
+                        <label >完成任务百分比</label>
+                        <input type="text" class="form-control" ng-model="edit.percentage"  placeholder="1-100">
+                    </div>
+                    <div class="form-group">
+                        <label >一级抽成百分比</label>
+                        <input type="text" class="form-control" ng-model="edit.primaryRoyalty"  placeholder="0-100" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label >二级抽成百分比</label>
+                        <input type="text" class="form-control" ng-model="edit.secondaryRoyalty" placeholder="0-100" disabled>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary" ng-click="audit()">保存</button>
+                    </div>
+                                            
+                </form>
+            </div>
+    </div>
+    
+
+    <div class="accounts_model container" ng-if="codepop">
+        <div class="pop col-xs-6">
+            <div class="modal-header text-center popheader">
+                <button type="button" class="close" data-dismiss="modal" ng-click="closepop()">
+                    <span >&times;</span>
+                    <span class="sr-only" >Close</span>
+                </button>
+                <h4 class="modal-title">邀请码</h4>
+            </div>
+            <div style="margin-top: 100px;"> <input type="number" ng-model="$parent.codenumber" placeholder="1-100"> <button class="btn  btn-default btn-primary update" ng-click="makecode(id)" >生成</button></div>
+            
+            <table class="table table-bordered table-striped text-center">
+                <thead>
+                    <tr class="info">
+                        <th width="60">序号</th>
+                        <th>邀请码</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in codes.items">
+                        <td ng-bind="((codes.page-1)*codes.count)+$index+1"></td>
+                        <td ng-bind="item.code"></td>  
+                        <td ng-bind="item.createTime"></td>                       
+                        <td><button class="btn  btn-default btn-primary update" ng-click="delCode(item.id)">删除</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="accounts_model container" ng-if="royaltypop">
+        <div class="pop col-xs-6">
+            <div class="modal-header text-center popheader">
+                <button type="button" class="close" data-dismiss="modal" ng-click="closepop()">
+                    <span >&times;</span>
+                    <span class="sr-only" >Close</span>
+                </button>
+                <h4 class="modal-title">抽成比例</h4>
+            </div>
+            <div style="margin-top: 100px;"><button class="btn  btn-default btn-primary update" ng-click="addrow()" >+</button></div>
+          <div ng-repeat="item in royalty" >
+            <div class="form-group col-xs-5" >
+                <label>抽成等级</label>
+                <input type="number" class="form-control" ng-model="item.chain"  placeholder="0-100">
+            </div>
+            <div class="form-group col-xs-5" >
+                <label>抽成比例</label>
+                <input type="number" class="form-control" ng-model="item.percentage"  placeholder="0-100">
+            </div>
+            <div class="form-group col-xs-2" >
+                <label>操作</label>
+                <button class="btn  btn-default btn-primary update" ng-click="delrow($index)">删除</button>
+            </div>
+          </div> 
+          <div class="text-center form-group col-xs-12" style="margin-top: 100px;">
+            <button class="btn  btn-default btn-primary update" ng-click="saveroyalty()">保存</button>
+          </div>
+        </div>
+        
+    </div>
+</div>

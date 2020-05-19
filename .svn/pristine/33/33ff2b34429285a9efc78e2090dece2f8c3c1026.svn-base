@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/public/css/style.css" />
+    <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <header></header>
+    <div class="container" style="overflow: hidden;">
+        <div class="col-md-2 left_menu"></div>
+        <div class="col-md-10 right_content">
+            <div class="col-md-12">
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="/user/index.html">客户管理</a>
+                    </li>
+                    <li class="active">修改客户</li>
+                </ol>
+            </div>
+            <div class="col-md-12">
+                <ul class="nav nav-tabs edit_step" role="tablist">
+                    <li class="presentation">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                    <li class="presentation ">
+                        <a href="edit-1.html">基础资料</a>
+                    </li>
+                    <li class="presentation">
+                        <a href="edit-2.html">客户联系人</a>
+                    </li>
+                    <li class="presentation ">
+                        <a href="edit-3.html">客户证件</a>
+                    </li>
+                    <li class="presentation  ">
+                        <a href="edit-4.html">品牌视觉</a>
+                    </li>
+                    <li class="presentation active ">
+                        <a href="edit-4.html">客户账号</a>
+                    </li>
+                </ul>
+            </div>
+            <form class="">
+                <div calss="col-md-12 ">
+                    <div class="form-horizontal col-md-10 user_add">
+                        <div class="form-group name">
+                            <label for="inputEmail3" class="col-sm-2 control-label text-right">账号</label>
+                            <div class="col-sm-5 ">
+                                <label class="control-label show_name"></label>
+                            </div>
+                        </div>
+                        <div class="form-group  password">
+                            <label for="inputEmail3" class="col-sm-2 control-label text-right">密码</label>
+                            <div class="col-sm-5">
+                                <div class="input-group">
+                                    <input type="password" class="form-control eye_in" name="password" maxlength="20" />
+                                    <div class="input-group-addon"> <i class="glyphicon glyphicon-eye-open open_eye"></i>
+                                    </div>
+                                </div>
+                                <div class="eye"></div>
+                            </div>
+                            <span class="col-sm-4 control-label text-left error_text">8-20位英文、字符或数字</span>
+                        </div>
+                        <div class="form-group  repassword">
+                            <label class="col-sm-2 control-label text-right">确认密码</label>
+                            <div class="col-sm-5">
+                                <div class="input-group">
+                                    <input type="password" class="form-control eye_in" name="repassword" maxlength="20" />
+                                    <div class="input-group-addon"> <i class="glyphicon glyphicon-eye-open open_eye"></i>
+                                    </div>
+                                </div>
+                                <div class="eye"></div>
+                            </div>
+                            <span class="col-sm-5 control-label text-left error_text">8-20位英文、字符或数字</span>
+                        </div>
+                    </div>
+                    <div class=" col-md-10 submite">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-3">
+                            <a class="btn btn-default btn-block call_back" href="/user/view-5.html">返回</a>
+                        </div>
+                        <div class="col-sm-3">
+                            <a class="btn btn-primary btn-block" onclick="post_guest()">提交</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Button trigger modal -->
+    <!-- Modal -->
+</body>
+<script type="text/javascript" src="/public/js/jqcookie.js"></script>
+<script type="text/javascript" src="/public/js/md5-min.js"></script>
+<script type="text/javascript" src="/public/js/main.js"></script>
+<script>
+get_url = url2get();
+$(function() {
+    $.each($(".edit_step a"), function(i, link) {
+        if (!link.href) {
+            return;
+        }
+        link.href = link.href + "?id=" + get_url.id;
+    })
+    $(".call_back").attr("href", $(".call_back").attr("href") + "?id=" + get_url.id);
+    if (get_url.id) {
+        get_guest = ajax_send({}, "/guest/" + get_url.id + "/manager", "GET");
+        if (!get_guest.result) {
+            location.href = index_url + "/user/add-5.html?id=" + get_url.id;
+        }
+        $(".show_name").text(get_guest.result.name);
+    } else {
+        alert("服务器繁忙");
+        location.href = index_url + "/user/index.html";
+    }
+    $(".open_eye").parent().hover(function() {
+        $(".eye").text($(".eye_in").val());
+        $(".eye").height(26);
+    }, function() {
+        $(".eye").text("");
+        $(".eye").height(0);
+    });
+
+});
+
+function post_guest() {
+    obj_password = $(".user_add input[name=password]");
+    obj_repassword = $("[name=repassword]");
+    if (obj_repassword.val() != obj_password.val()) {
+        text = "两次密码输入不一致";
+        $(".error").text(text);
+        new text_check_new().text_error2(obj_password, 1, text);
+        new text_check_new().text_error2(obj_repassword, 1, text);
+        return;
+    }
+    postPassword = new text_check_new().user_password_check(obj_password);
+    repassword = new text_check_new().user_password_check(obj_repassword);
+    json = {
+        "password": hex_md5(postPassword)
+    };
+    //jsons=JSON.stringify(json);
+    data3 = ajax_send(json, "/guest/manager/" + get_guest.result.id + "/reset", "PUT", 1);
+    if (data3.code != 200) {
+        $(".error").text(data.message);
+        return false;
+    } else {
+        alert("修改成功");
+        location.href = index_url + "/user/view-5.html?id=" + get_url.id;
+    }
+
+}
+</script>
+</body>
+
+</html>

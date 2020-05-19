@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/public/css/style.css" />
+    <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <header></header>
+    <div class="container" style="overflow: hidden;">
+        <div class="col-xs-2 left_menu">
+        </div>
+        <div class="col-xs-10 right_content">
+            <div class="col-md-12">
+                <ol class="breadcrumb">
+                    <li><a href="/user/index.html">客户管理</a></li>
+                    <li class="active">修改客户</li>
+                </ol>
+            </div>
+            <ul class="nav nav-tabs edit_step" role="tablist">
+                <li class="presentation">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                <li class="presentation "><a href="edit-1.html">基础资料</a></li>
+                <li class="presentation active"><a href="edit-2.html">客户联系人</a></li>
+                <li class="presentation "><a href="edit-3.html">客户证件</a></li>
+                <li class="presentation  ">
+                    <a href="edit-4.html">品牌信息</a>
+                </li>
+                <li class="presentation "><a href="edit-5.html">客户账号</a></li>
+            </ul>
+            <div calss="col-md-12 ">
+                <div class="form-horizontal col-md-10">
+                    <div class="form-group">
+                        <label for="" class="control-label col-sm-2"></label>
+                        <div class="col-sm-4 error">
+                            <span class="important">*</span> 为必填项
+                        </div>
+                    </div>
+                    <div class="form-group name nickname">
+                        <label for="inputEmail3" class="col-sm-2 control-label text-right">
+                            <span class="important">*</span> 姓名
+                        </label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" name="name" />
+                        </div>
+                        <div class="error_text col-sm-4 control-label text-left">2-20个汉字、英文或数字，不允许空格</div>
+                    </div>
+                    <div class="form-group  gender">
+                        <label for="inputEmail3" class="col-sm-2 control-label text-right">
+                            <span class="important">*</span> 性别
+                        </label>
+                        <div class="btn-group col-sm-4" data-toggle="buttons">
+                            <label class="btn btn-default col-sm-4">
+                                <input type="radio" class="col-sm-4" name="gender" id="gender1" value="0">保密</label>
+                            <label class="btn btn-default col-sm-4">
+                                <input type="radio" class="col-sm-4" name="gender" id="gender2" value="1">男</label>
+                            <label class="btn btn-default  col-sm-4">
+                                <input type="radio" class="col-sm-4" name="gender" id="gender3" value="2">女</label>
+                        </div>
+                    </div>
+                    <div class="form-group  telphone">
+                        <label for="inputEmail3" class="col-sm-2 control-label text-right">
+                            <span class="important">*</span> 联系方式
+                        </label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" name="tel" />
+                        </div>
+                        <div class="error_text col-sm-4 control-label text-left">请输入手机或固定电话</div>
+                    </div>
+                </div>
+                <div class=" col-md-10 submite">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-3">
+                        <a class="btn btn-default btn-block call_back" href="/user/view-2.html">返回</a>
+                    </div>
+                    <div class="col-sm-3">
+                        <a class="btn btn-primary btn-block " onclick="post_guest()">确认</a>
+                    </div>
+                </div>
+            </div>
+        </Div>
+    </div>
+</body>
+<script type="text/javascript" src="../public/js/jqcookie.js"></script>
+<script type="text/javascript" src="/public/js/main.js"></script>
+<script type="text/javascript" src="/public/js/md5-min.js" ></script>
+
+<script>
+get_url = url2get();
+$(function() {
+    $.each($(".edit_step a"), function(i, link) {
+        if (!link.href) {
+            return;
+        }
+        link.href = link.href + "?id=" + get_url.id;
+    })
+    $(".call_back").attr("href", $(".call_back").attr("href") + "?id=" + get_url.id);
+    if (get_url.id) {
+        get_guest = ajax_send({}, "/guest/" + get_url.id + "/contact", "GET");
+        if (!get_guest.result) {
+            location.href = index_url + "/user/add-2.html?id=" + get_url.id;
+        }
+        get_input_json = {
+            "name": get_guest.result.name,
+            "tel": get_guest.result.tel
+        };
+        for (var x in get_input_json) {
+            str = get_input_json[x];
+            $("input[name=" + x + "]").val(str);
+        };
+        $('[name=gender]').eq(get_guest.result.gender).attr("checked", true).parent().addClass('active');
+    } else {
+        alert("服务器繁忙");
+        location.href = index_url + "/user/index.html";
+    }
+
+})
+
+function post_guest() {
+    text_check = new text_check_new();
+    post_name_obj = $(".name input[name=name]");
+    post_name = text_check.user_nickname_check(post_name_obj);
+    post_telphone_obj = $(".telphone input[name=tel]");
+    post_telephone = text_check.telphone_check(post_telphone_obj);
+    post_gender = $(".gender input[name=gender]:checked").val();
+    if (!post_name || !post_telephone) {
+        return;
+    };
+    json = {
+        "name": post_name,
+        "tel": post_telephone,
+        "gender": post_gender
+    };
+    for (var x in json) {
+        if (json[x] == "") {
+            delete json[x];
+        }
+    }
+//    jsons = JSON.stringify(json);
+    data = ajax_send(json, "/guest/" + get_url.id + "/contact", "PUT");
+    if (data.code == 200) {
+        alert("修改成功");
+        location.href = index_url + "/user/view-2.html?id=" + get_url.id;
+    }
+    return;
+}
+</script>
+</body>
+
+</html>

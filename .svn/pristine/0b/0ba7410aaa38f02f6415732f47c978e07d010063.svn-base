@@ -1,0 +1,323 @@
+<div class="contents bgw">
+	<div>
+		<button style=" width: 15% ; margin-bottom: 10px;" class="btn btn-primary"  ng-click="create()">系统钱包</button>
+	</div>
+
+	<form class="form-inline time-search" name="searchData" style="padding: 0"
+		ng-submit="searchFn()" >	
+		<!-- <div class="form-group">
+			<div class="input-group">
+				<div class="input-group-addon">状态</div>
+				<select class="form-control" name="state" ng-model="posts.state">
+					<option selected="selected" value="">所有</option>
+					<option value="1001">申请中</option>
+					<option value="1002">已划款</option>
+					<option value="1003">审核中</option>
+					<option value="1004">已驳回</option>
+				</select>
+			</div>
+		</div> -->
+		<div class="form-group"style="margin : 15px 0">
+			<label>时间：</label>
+			<input type="datetime-local" style="color: #18A0D4" ng-model="posts.startTime" class="form-control"
+					placeholder="起始时间"
+					name="startTime" max="{{posts.initTime}}" required/>
+			~
+			<input type="datetime-local" style="color: #18A0D4" ng-model="posts.endTime" class="form-control"
+					placeholder="结束时间" max="{{posts.initTime}}" name="endTime" required/>
+		</div>
+		<div class="form-group">
+			<button class="btn btn-default btn-primary" style="margin : 15px 0" ng-disabled="searchData.$invalid">筛选</button>
+		</div>
+		
+	</form>
+	<ul id="myTab" class="nav nav-tabs nav-tabs2" ng-init="type = ''">
+		<li ng-class="{'active':type==''}"><a ng-click="change('')">所有</a></li>
+		<li ng-class="{'active':type=='1000'}"><a ng-click="change('1000')">申请中</a></li>
+		<li ng-class="{'active':type=='1002'}"><a ng-click="change('1002')">审核中</a></li>
+		<li ng-class="{'active':type=='1111'}"><a ng-click="change('1111')">已划款</a></li>
+		<li ng-class="{'active':type=='1004'}"><a ng-click="change('1004')">已驳回</a></li>
+	</ul>	
+	<div >
+		<table  class="table table-bordered table-striped text-center">
+			<thead>
+				<tr class="info">
+					<th width="60">序号</th>
+					<th>客户品牌名</th>
+					<th>分店名</th>
+					<th>服务员</th>
+					<th>申请金额</th>
+					<th>申请时间</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="message in posts.messages.items" ng-if = "type==''">
+					<td width="60" ng-bind="((posts.messages.page-1)*posts.messages.count)+$index+1"></td>
+					<td width="20%" ng-bind="message.brand"></td>
+					<td width="15%" ng-bind="message.shopName"></td>
+					<td width="15%" ng-bind="message.staffName"></td>
+					<td width="10%" ng-bind="message.amount"></td>
+					<td width="15%" ng-bind="message.createTime|date:'yyyy-MM-dd HH:mm:ss'"></td>
+					<td width="15%" ng-if = "message.state == '1002'"> <button class="btn  btn-default btn-primary update" ng-click="audit(message.id)">审核</button> </td>
+					<td width="15%" ng-if = "message.state != '1002'"> </td>
+				</tr>
+				<tr ng-repeat="message in posts.messages.items" ng-if = "type=='1000' && message.state=='1000'">
+					<td width="60" ng-bind="((posts.messages.page-1)*posts.messages.count)+$index+1"></td>
+					<td width="20%" ng-bind="message.brand"></td>
+					<td width="15%" ng-bind="message.shopName"></td>
+					<td width="15%" ng-bind="message.staffName"></td>
+					<td width="10%" ng-bind="message.amount"></td>
+					<td width="15%" ng-bind="message.createTime|date:'yyyy-MM-dd HH:mm:ss'"></td>
+					<td width="15%"> </td>
+				</tr>
+				<tr ng-repeat="message in posts.messages.items" ng-if = "type=='1002' && message.state=='1002'">
+					<td width="60" ng-bind="((posts.messages.page-1)*posts.messages.count)+$index+1"></td>
+					<td width="20%" ng-bind="message.brand"></td>
+					<td width="15%" ng-bind="message.shopName"></td>
+					<td width="15%" ng-bind="message.staffName"></td>
+					<td width="10%" ng-bind="message.amount"></td>
+					<td width="15%" ng-bind="message.createTime|date:'yyyy-MM-dd HH:mm:ss'"></td>
+					<td width="15%"> <button class="btn  btn-default btn-primary update" ng-click="audit(message.id)">审核</button>  </td>
+				</tr>
+				<tr ng-repeat="message in posts.messages.items" ng-if = "type=='1111'">
+					<td width="60" ng-bind="((posts.messages.page-1)*posts.messages.count)+$index+1"></td>
+					<td width="20%" ng-bind="message.brand"></td>
+					<td width="15%" ng-bind="message.shopName"></td>
+					<td width="15%" ng-bind="message.staffName"></td>
+					<td width="10%" ng-bind="message.amount"></td>
+					<td width="15%" ng-bind="message.operatorTime"></td>
+					<td width="15%">  </td>
+				</tr>
+				<tr ng-repeat="message in posts.messages.items" ng-if = "type=='1004' && message.state=='1004'">
+					<td width="60" ng-bind="((posts.messages.page-1)*posts.messages.count)+$index+1"></td>
+					<td width="20%" ng-bind="message.brand"></td>
+					<td width="15%" ng-bind="message.shopName"></td>
+					<td width="15%" ng-bind="message.staffName"></td>
+					<td width="10%" ng-bind="message.amount"></td>
+					<td width="15%" ng-bind="message.createTime|date:'yyyy-MM-dd HH:mm:ss'"></td>
+					<td width="15%"> </td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<!-- 分页 -->
+		<div class="col-sm-8 " ng-if="posts.messages.items">
+			<pagination items-per-page="posts.messages.count" boundary-links="true" total-items="posts.messages.total" ng-model="posts.messages.page" class="pagination-sm" previous-text="&lsaquo;" ng-change="pageChange()" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+			</pagination>
+		</div>
+	</div>
+	<!-- 审核模态框 -->
+	<div class="modal" id="edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+		<div class="modal-dialog" style=" width: 65% ; max-height: max-content" >
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span>
+						<span class="sr-only">Close</span>
+					</button>
+					<h4 class="modal-title">审核操作</h4>
+				</div>
+				<div class="modal-body">
+					<div>
+						<!-- <form class="couponadd" role="form" name="couponNew" novalidate> -->
+						<div class="couponadd">
+							<div class="form-inline">
+								<label class="control-label col-sm-2 text-left">申请人</label>
+								<div class="form-group">
+									<span ng-model="edit.message.wallet.name">{{edit.message.wallet.name}}</span>
+								</div>
+							</div>
+							<div class="form-inline">
+								<label class="control-label col-sm-2 text-left">手机号</label>
+								<div class="form-group">
+									<span ng-model="edit.message.wallet.phone">{{edit.message.wallet.phone}}</span>
+								</div>
+							</div>
+							<div class="form-inline" ng-if="edit.message.wallet.identityNo">
+								<label class="control-label col-sm-2 text-left">身份证号</label>
+								<div class="form-group">
+									<span ng-model="edit.message.wallet.identityNo">{{edit.message.wallet.identityNo}}</span>
+									<a ng-if="edit.message.wallet.identityPicUrl" href="{{edit.message.wallet.identityPicUrl}}" target="_blank">查看身份证照片</a>
+								</div>
+							</div>
+							<div class="form-inline">
+								<label class="control-label col-sm-2 text-left">银行卡号</label>
+								<div class="form-group">
+									<span ng-model="edit.message.wallet.cardNo">{{edit.message.wallet.cardNo}}</span>
+									<a ng-if="edit.message.wallet.cardPicUrl" href="{{edit.message.wallet.cardPicUrl}}" target="_blank">查看银行卡照片</a>
+								</div>
+							</div>
+							<!-- <div class="form-inline">
+								<label class="control-label col-sm-2 text-left">身份证号</label>
+								<div class="form-group">
+										<span ng-bind="edit.wallet.cardNo"></span>
+								</div>
+							</div> -->
+							<div class="form-inline">
+								<label class="control-label col-sm-2 text-left">开户行</label>
+								<div class="form-group">
+									<span ng-model="edit.message.wallet.bankName">{{edit.message.wallet.bankName}}</span>
+								</div>
+							</div>
+							<div class="form-inline">
+								<label class="control-label col-sm-2 text-left">申请金额</label>
+								<div class="form-group">
+									<span ng-model="edit.message.amount">{{edit.message.amount}}</span>
+								</div>
+							</div>
+							<div class="form-inline"  ng-if="edit.message.wallet.state == 1002">
+								<label class="control-label col-sm-2 text-left">备注</label>
+								<div class="form-group">
+									<textarea name="wallet_des" id="wallet_des" cols="20" rows="5" placeholder="字符长度在50字以内" ></textarea>
+								</div>
+							</div>
+							<div class="form-inline text-center" ng-if="edit.message.wallet.state == 1002">
+								<p style="color : #ccc">如果信息有误请填写备注点击驳回</p> 
+								<div class="form-group">
+									<div style="width: 100px" class=" btn btn-primary" ng-click="affirm(edit.message.wallet.id,1111)">确认无误</div>
+									<div style="width: 100px" class=" btn btn-default" ng-click="affirm(edit.message.wallet.id,1004 )">驳回</div>
+								</div>
+							</div>
+							<div class="form-inline text-center" ng-if="edit.message.wallet.state == 1111">
+								<p style="color : #ccc">如果信息有误请填写备注点击驳回</p> 
+								<div class="form-group">
+									<div style="width: 100px" class=" btn btn-default">已确认</div>
+								</div>
+							</div>
+						</div>	
+						<div style="width : 100% ;height: 5px;background-color: #ccc;margin:0 0 20px"></div>
+						<form class="couponadd" id="couponadd" role="form" name="couponNew" novalidate>
+							<div class="form-inline">
+								<label class="control-label col-sm-2 col-sm-offsets-2 text-left"><span class="text-red">*</span>划款金额</label>
+								<div class="form-group" >
+									<input type="number" class="form-control" min="0" ng-model="view.amount" required>
+								</div>
+							</div>
+							<div class="form-inline">
+								<label class="control-label col-sm-2 col-sm-offsets-2 text-left"><span class="text-red">*</span>手续费</label>
+								<div class="form-group" >
+									<input type="number" class="form-control" min="0" ng-model="view.fee" required>
+								</div>
+							</div>
+							<div class="form-inline">
+								<label class="control-label col-sm-2 col-sm-offsets-2 text-left"><span class="text-red">*</span>出款账户</label>
+								<div class="form-group">
+									<select ng-model="view.walletOutId" class="form-control"
+									ng-options="item.id as item.cardNo for item in edit.wallets" required></select>
+								</div>
+							</div>
+							<div class="form-inline">
+								<label class="control-label col-sm-2 text-left"><span class="text-red">*</span>备注</label>
+								<div class="form-group">
+								<textarea  id="" cols="20" rows="5" ng-model="view.description"  placeholder="字符长度在50字以内" required></textarea>
+								</div>
+							</div>
+							<div class="form-inline">
+								<label class="control-label col-sm-2 text-left"><span class="text-red">*</span>上传凭证</label>
+								<div class="" >
+									<div class="col-sm-3 picShow"  style="padding-left: 0;margin-bottom: 10px">
+										<div class="legalPicShow">
+											<img src="/public/img/tem_upload.jpg"/>
+										</div>
+										<label class="btn btn-primary legalPicChose btn-block" for="file">点击选择图片</label>
+									</div>
+									<div class="col-sm-6 form-control-static error-text">
+										支持jpg、jpeg格式
+										<br> 图片大小不大于5M。
+										<input type="file" class="hidden" id="file" name="file"
+												onchange="pic_check('legalPic')" required/>
+									</div>
+								</div> 
+							</div>
+							<div class="form-inline  text-center">
+								<button type="submit" style="width: 100px" class="btn btn-primary click submit" >确认</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			<div style="height: 40px"></div>
+			</div>
+		</div>
+	</div>
+	<!-- 详情模态框 -->
+	<div class="modal" id="detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+			<div class="modal-dialog" style=" width: 65% ; max-height: max-content" >
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">
+							<span aria-hidden="true">&times;</span>
+							<span class="sr-only">Close</span>
+						</button>
+						<h4 class="modal-title">查看详情</h4>
+					</div>
+					<div class="modal-body">
+						<div>
+							<div class="couponadd">
+								<div class="form-inline">
+									<label class="control-label col-sm-2 text-left">申请人</label>
+									<div class="form-group">
+										<!-- <span>张三</span> -->
+										<span ng-model="edit.message.wallet.name">{{edit.message.wallet.name}}</span>
+									</div>
+									
+								</div>
+								<div class="form-inline">
+									<label class="control-label col-sm-2 text-left">手机号</label>
+									<div class="form-group">
+										<span ng-model="edit.message.wallet.phone">{{edit.message.wallet.phone}}</span>
+									</div>
+								</div>
+								<div class="form-inline" ng-if="edit.message.wallet.identityNo">
+									<label class="control-label col-sm-2 text-left">身份证号</label>
+									<div class="form-group">
+										<span ng-model="edit.message.wallet.identityNo">{{edit.message.wallet.identityNo}}</span>
+										<a ng-if="edit.message.wallet.identityPicUrl" href="{{edit.message.wallet.identityPicUrl}}" target="_blank">查看身份证照片</a>
+									</div>
+								</div>
+								<div class="form-inline">
+									<label class="control-label col-sm-2 text-left">银行卡号</label>
+									<div class="form-group">
+										<span ng-model="edit.message.wallet.cardNo">{{edit.message.wallet.cardNo}}</span>
+										<a ng-if="edit.message.wallet.cardPicUrl" href="{{edit.message.wallet.cardPicUrl}}" target="_blank">查看银行卡照片</a>
+									</div>
+								</div>
+								<div class="form-inline">
+									<label class="control-label col-sm-2 text-left">开户行</label>
+									<div class="form-group">
+										<span ng-model="edit.message.wallet.bankName">{{edit.message.wallet.bankName}}</span>
+									</div>
+								</div>
+								<div class="form-inline">
+									<label class="control-label col-sm-2 text-left">申请金额</label>
+									<div class="form-group">
+										<span ng-model="edit.message.amount">{{edit.message.amount}}</span>
+									</div>
+								</div>
+								<div class="form-inline"  ng-if="edit.message.wallet.state == 1002">
+									<label class="control-label col-sm-2 text-left">备注</label>
+									<div class="form-group">
+										<textarea name="wallet_des" id="wallet_des" cols="20" rows="5" placeholder="字符长度在50字以内" ></textarea>
+									</div>
+								</div>
+								<div class="form-inline text-center" ng-if="edit.message.wallet.state == 1002">
+									<p style="color : #ccc">如果信息有误请填写备注点击驳回</p> 
+									<div class="form-group">
+										<div style="width: 100px" class=" btn btn-primary" ng-click="affirm(edit.message.wallet.id,1111)">确认无误</div>
+										<div style="width: 100px" class=" btn btn-default" ng-click="affirm(edit.message.wallet.id,1004 )">驳回</div>
+									</div>
+								</div>
+								<div class="form-inline text-center" ng-if="edit.message.wallet.state == 1111">
+									<p style="color : #ccc">如果信息有误请填写备注点击驳回</p> 
+									<div class="form-group">
+										<div style="width: 100px" class=" btn btn-default">已确认</div>
+									</div>
+								</div>
+							</div>	
+						</div>
+					</div>
+				<div style="height: 40px"></div>
+				</div>
+			</div>
+		</div>
+</div>

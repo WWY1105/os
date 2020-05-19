@@ -1,0 +1,1 @@
+function objSort(r){var t="f1d746c8fb47435a8e3b78a2de883767",a=[];for(var e in r)a[e]=r[e];r.timestamp=(new Date).getTime(),a.timestamp=r.timestamp,a.sort();var n="";for(var i in a)n+=i+"="+a[i];n+=t;for(var m=hex_md5(n),o="",f=0;f<m.length;f+=2)o+=m.charAt(f);for(var v=1;v<m.length;v+=2)o+=m.charAt(v);return r.signature=o,r}

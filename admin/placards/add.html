@@ -1,0 +1,90 @@
+<div>
+  <form class="row" enctype="multipart/form-data" name="add_form">
+    <div class="col-xs-12">
+      <div class="col-sm-10 form-horizontal">
+        <div class="form-group">
+          <div class="col-sm-6 text-red col-sm-offset-2 ">*为必填项</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label text-right">*名称</label>
+
+          <div class="col-sm-5">
+            <input class="form-control" id="name" ng-model="post.title" type="text" required/>
+          </div>
+          <div class="has-error col-sm-4 form-control-static  error_text"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-3 control-label text-right">*链接</label>
+
+          <div class="col-sm-5">
+            <input class="form-control" ng-model="post.linkUrl" type="url" required/>
+          </div>
+          <div class="has-error col-sm-4 form-control-static error_text"></div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label text-right">*图片-横图</label>
+
+          <div class="col-sm-9">
+            <div>仅允许m.sharejoy.cn和m.ishangbin.com域名下的链接</div>
+            <a class="col-sm-3 btn btn-default" ng-click="openFn('transversePicUrl')">选择图片</a>
+            <img ng-src="{{post.transversePicUrl}}" style="max-height: 100px">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label text-right">图片-竖图</label>
+
+          <div class="col-sm-3">
+            <a class="btn btn-default btn-block" ng-click="openFn('verticalPicUrl')">选择图片</a>
+            <img ng-src="{{post.verticalPicUrl}}" style="max-height: 100px">
+          </div>
+        </div>
+        <div class="col-sm-10 col-sm-offset-2">
+          <div class="row">
+            <div class="col-sm-3">
+              <a class="btn btn-default btn-block" back-button>返回</a>
+            </div>
+            <div class="col-sm-3 col-sm-offset-1">
+              <button class="btn btn-danger btn-block" ng-click="submitFn()"  ng-disabled="!add_form.$valid">确定</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </form>
+  <div class="modal" id="pic" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+          </button>
+          <h4 class="modal-title" id="myModalLabel">选择图片</h4>
+        </div>
+        <div class="modal-body form-horizontal">
+          <div class="form-group">
+            <div class="col-sm-12" style="max-height: 260px;overflow: auto" ng-if="view.urls">
+              <div class="selected_mask" ng-repeat="item in view.urls.items track by $index">
+                <img ng-click="view.picUrl = item.url" ng-src="{{item.url}}">
+                <div ng-class="view.picUrl == item.url?'selected_mask_icon':''"></div>
+              </div>
+              <div ng-if="view.urls.pageSize>1">
+                <pagination items-per-page="view.urls.count" boundary-links="true" total-items="view.urls.total"
+                            ng-model="view.urls.page" class="pagination-sm" previous-text="&lsaquo;"
+                            ng-change="pageChange()"
+                            next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+                </pagination>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary click" ng-click="sendPicFn()">确认</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">返回</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

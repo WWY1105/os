@@ -1,0 +1,67 @@
+<div>
+  <div class="col-xs-12 zone-show">
+    <div class="col-md-12">
+      <h4>城市</h4>
+    </div>
+    <div class="col-sm-12" id="city-show">
+      <div class="row citylist">
+        <div class="col-sm-2" ng-class="$index==view.index?'active':''" ng-repeat="item in view.city"
+             ng-click="chooseFn($index)"><span>{{item.name}}</span></div>
+      </div>
+    </div>
+    <form class="line-in" ng-if="view.hasOwnProperty('index')">
+      <div class="form-horizontal col-md-12" style="border: 1px solid #f1f1f1;padding: 10px 35px">
+        <div class="form-group line-in" ng-repeat="item in view.ad track by $index">
+          <div style="padding: 10px 0" class="">第{{$index+1}}条</div>
+          <div ng-if="item">
+            <div>{{item.title}}</div>
+            <img ng-src="{{item.transversePicUrl}}" style="height: 200px">
+          </div>
+          <button type="button" ng-if="!item" class="btn btn-primary" ng-click="openFn($index)">增加</button>
+          <button type="button" ng-if="item" class="btn btn-warning" ng-click="deleteFn($index)">删除</button>
+
+        </div>
+      </div>
+
+    </form>
+  </div>
+  <div class="modal" id="dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+          </button>
+          <h4 class="modal-title" id="myModalLabel">选择广告</h4>
+        </div>
+        <form class="form-horizontal" name="ruleForm" ng-submit="submitFn()">
+          <div class="modal-body form-horizontal">
+            <div class="form-group">
+
+              <div class="col-sm-12" style="max-height: 260px;overflow: auto" ng-if="view.placards">
+                <div class="selected_mask" ng-repeat="item in view.placards.items track by $index">
+                  <img ng-click="post.adsId = item.id" ng-src="{{item.transversePicUrl}}">
+                  <div>{{item.title}}</div>
+                  <div ng-class="post.adsId == item.id?'selected_mask_icon':''"></div>
+                </div>
+                <div ng-if="view.placards.pageSize>1">
+                  <pagination items-per-page="view.placards.count" boundary-links="true"
+                              total-items="view.placards.total"
+                              ng-model="view.placards.page" class="pagination-sm" previous-text="&lsaquo;"
+                              ng-change="pageChange()"
+                              next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+                  </pagination>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary click submit" ng-disabled="ruleForm.$invalid">确认</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">返回</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

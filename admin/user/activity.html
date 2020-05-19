@@ -1,0 +1,37 @@
+<form class="row" enctype="multipart/form-data">
+  
+  <div class="col-md-12">
+      <div ng-bind="username"></div>
+    <div class="col-sm-10 form-horizontal">
+      <div class="form-group">
+        <label for="product" class="col-sm-2 control-label text-right">
+          <span class="text-red">*</span> 类型
+        </label>
+        <div class="col-sm-10" id="product">
+          <div class="form-group">
+            <div class="col-sm-6">
+              <label class="radio-inline">
+                <input type="checkbox" ng-model="view.all"/>
+                全选</label>
+            </div>
+          </div>
+          <label class="radio-inline" style="margin-right: -24px;"></label>
+          <label class="radio-inline" ng-repeat="(key,value) in view.type" style="width: 31%;vertical-align: text-top">
+            <input type="checkbox" ng-model="post[key]"/>
+            <span ng-bind="value"></span>
+          </label>
+        </div>
+      </div>
+      <div class="col-sm-10 col-sm-offset-2">
+        <div class="row">
+          <div class="col-sm-3">
+            <a class="btn btn-default btn-block" back-button>返回</a>
+          </div>
+          <div class="col-sm-3 col-sm-offset-1">
+            <button class="btn btn-danger btn-block" ng-click="submitFn()">确定</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

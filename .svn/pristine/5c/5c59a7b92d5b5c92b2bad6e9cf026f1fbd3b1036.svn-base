@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <!--[if lte IE 8]>
+  <script>window.location.href = '/upload.html';</script>
+  <![endif]-->
+  <!--[if lte IE 7]>
+  <script>window.location.href = '/upload.html';</script>
+  <![endif]-->
+  <!--[if lte IE 6]>
+  <script>window.location.href = '/upload.html';</script>
+  <![endif]-->
+  <title>用户管理</title>
+  <link rel="stylesheet" href="/public/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/public/css/style.css"/>
+  <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/public/js/jqcookie.js"></script>
+<style>
+  input[type=checkbox] {
+    margin-left: 10px;
+  }
+</style>
+</head>
+
+<body>
+<header></header>
+<div class="container">
+  <div class="col-md-2 left_menu"></div>
+  <div class="col-md-10 right_content">
+    <div class="col-md-12">
+      <ol class="breadcrumb">
+        <li class="active">
+          <a href="/game/index.html">游戏管理</a>
+        </li>
+        <li>浏览</li>
+      </ol>
+    </div>
+    <div class="col-md-12 check_list">
+      <table class="table table-bordered result text-center">
+        <tr class="info ">
+          <th>名称</th>
+          <th>参与机会</th>
+          <th>游戏时间（s）</th>
+          <th>游戏概率</th>
+          <th>授权时间</th>
+          <th width=200>操作</th>
+        </tr>
+      </table>
+    </div>
+    <div class=" results col-md-12">
+      <div class="row">
+        <div class="col-md-3">
+          <!--<a class="btn btn-danger btn-half del_all" onclick="del_all()">删除</a>-->
+          <a class="btn btn-primary click add">新增游戏授权</a>
+        </div>
+        <div class="col-md-6">
+          <ul class="pagination page"></ul>
+        </div>
+        <div class="col-md-3 pagesize text-left"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="dialog_author" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">添加游戏</h4>
+      </div>
+      <div class="modal-body">
+        <a class="check_all btn btn-default" onclick="check_all('user_result')">全选</a>
+        <div class="form-horizontal">
+          <div class="form-group result">
+         </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary submit ">确认添加</a>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="/public/js/md5-min.js"></script>
+<script type="text/javascript" src="/public/js/main.js"></script>
+<script>
+  $(function () {
+    get_url = url2get();
+    data = new search_result({
+      page: 1, count: 10
+    }, "/guest/" + get_url.id + "/game", "GET");
+    data.author_show();
+  })
+
+  function select_all() {
+    var re = new Array();
+    $(".result input[name='author_id[]']").each(function () {
+      if ($(this).prop('checked') == true) re.push($(this).val());
+    });
+
+    if (re.length > 0) {
+      res = re.join(",");
+      data = ajax_send({ids: res}, "/game/ids", "POST");
+      if (data.code == 200) {
+        alert("删除成功");
+      } else {
+        alert(data.message);
+      }
+      for (i = 0; i < re.length; i++) {
+        $("#result_id_" + re[i]).remove();
+      }
+    }
+  }
+</script>
+</body>
+
+</html>

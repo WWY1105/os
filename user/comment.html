@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="/public/js/editor/bootstrap-combined.css" rel="stylesheet">
+  <link href="https://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
+  <link rel="stylesheet" href="/public/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/public/css/style.css"/>
+  <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
+
+  <script type="text/javascript" src="/public/js/editor/jquery.hotkeys.js"></script>
+  <script type="text/javascript" src="/public/js/editor/bootstrap-wysiwyg.js"></script>
+  <script type="text/javascript" src="/public/js/main.js"></script>
+  <script type="text/javascript" src="/public/js/md5-min.js"></script>
+  <script type="text/javascript" src="/public/js/jqcookie.js"></script>
+
+</head>
+<body>
+<header></header>
+<div class="container">
+  <div class="right_content">
+    <div class="col-sm-12">
+      <ol class="breadcrumb">
+        <li>
+          <a href="/user/index.html">客户管理</a>
+        </li>
+        <li><a href="/user/index.html">门店查看</a></li>
+        <li class="active">大咀港式茶餐厅(万达店)</li>
+        <li class="active">smith于2015.02.25 16：54评价</li>
+      </ol>
+    </div>
+    <div class="row">
+      <div class="col-sm-7">
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label for="title" class="col-sm-2 control-label">标题：</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="title" placeholder="30字以内的标题">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">封面：</label>
+            <div class="col-sm-10">
+              <label for="cover" class="control-label border" style=""><span
+                      class="glyphicon glyphicon-arrow-up text-yellow"></span></label>
+              <input type="file" class="form-control hidden " id="cover">
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="col-sm-12">
+      <div class="container">
+        <div class="hero-unit">
+          <div><label class="control-label">正文：</label></div>
+          <div class="abtn-toolbar" data-role="editor-toolbar" data-target="#editor">
+            <div class="abtn-group">
+              <a class="abtn dropdown-toggle" data-toggle="dropdown" title="Font"><i class="icon-font"></i><b
+                      class="caret"></b></a>
+              <ul class="dropdown-menu">
+              </ul>
+            </div>
+            <div class="abtn-group">
+              <a class="abtn dropdown-toggle" data-toggle="dropdown" title="Font Size"><i class="icon-text-height"></i>&nbsp;<b
+                      class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a data-edit="fontSize 5"><font size="5">Huge</font></a></li>
+                <li><a data-edit="fontSize 3"><font size="3">Normal</font></a></li>
+                <li><a data-edit="fontSize 1"><font size="1">Small</font></a></li>
+              </ul>
+            </div>
+            <div class="abtn-group">
+              <a class="abtn" data-edit="bold" title="Bold (Ctrl/Cmd+B)"><i class="icon-bold"></i></a>
+              <a class="abtn" data-edit="italic" title="Italic (Ctrl/Cmd+I)"><i class="icon-italic"></i></a>
+              <a class="abtn" data-edit="strikethrough" title="Strikethrough"><i class="icon-strikethrough"></i></a>
+              <a class="abtn" data-edit="underline" title="Underline (Ctrl/Cmd+U)"><i class="icon-underline"></i></a>
+            </div>
+            <div class="abtn-group">
+              <a class="abtn" data-edit="insertunorderedlist" title="Bullet list"><i class="icon-list-ul"></i></a>
+              <a class="abtn" data-edit="insertorderedlist" title="Number list"><i class="icon-list-ol"></i></a>
+              <a class="abtn" data-edit="outdent" title="Reduce indent (Shift+Tab)"><i class="icon-indent-left"></i></a>
+              <a class="abtn" data-edit="indent" title="Indent (Tab)"><i class="icon-indent-right"></i></a>
+            </div>
+            <div class="abtn-group">
+              <a class="abtn" data-edit="justifyleft" title="Align Left (Ctrl/Cmd+L)"><i
+                      class="icon-align-left"></i></a>
+              <a class="abtn" data-edit="justifycenter" title="Center (Ctrl/Cmd+E)"><i
+                      class="icon-align-center"></i></a>
+              <a class="abtn" data-edit="justifyright" title="Align Right (Ctrl/Cmd+R)"><i class="icon-align-right"></i></a>
+              <a class="abtn" data-edit="justifyfull" title="Justify (Ctrl/Cmd+J)"><i
+                      class="icon-align-justify"></i></a>
+            </div>
+            <div class="abtn-group">
+              <a class="abtn dropdown-toggle" data-toggle="dropdown" title="Hyperlink"><i class="icon-link"></i></a>
+              <div class="dropdown-menu input-append">
+                <input class="span2" placeholder="URL" type="text" data-edit="createLink"/>
+                <button class="abtn" type="button">Add</button>
+              </div>
+              <a class="abtn" data-edit="unlink" title="Remove Hyperlink"><i class="icon-cut"></i></a>
+
+            </div>
+
+            <div class="abtn-group">
+              <a class="abtn" title="Insert picture (or just drag & drop)" id="pictureabtn"><i
+                      class="icon-picture"></i></a>
+              <input type="file" data-role="magic-overlay" data-target="#pictureabtn" data-edit="insertImage"
+                     id="picture-select"/>
+            </div>
+            <div class="abtn-group">
+              <a class="abtn" data-edit="undo" title="Undo (Ctrl/Cmd+Z)"><i class="icon-undo"></i></a>
+              <a class="abtn" data-edit="redo" title="Redo (Ctrl/Cmd+Y)"><i class="icon-repeat"></i></a>
+            </div>
+            <input type="text" data-edit="inserttext" id="voiceabtn" x-webkit-speech="">
+          </div>
+          <div id="editor">
+          </div>
+        </div>
+      </div>
+      <form class="container">
+        <button type="button" class="btn btn-default yellow-btn">确认并置顶本评论</button>
+        <button type="button" class="btn btn-default yellow-border-btn">取消置顶</button>
+        <button type="button" class="btn btn-default red-border-btn pull-right" style="margin-right: 30px">删除本文</button>
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+  $(function () {
+    //初始化
+    function initToolbarBootstrapBindings() {
+      var fonts = ['Serif', 'Sans', 'Arial', 'Arial Black', 'Courier',
+                'Courier New', 'Comic Sans MS', 'Helvetica', 'Impact', 'Lucida Grande', 'Lucida Sans', 'Tahoma', 'Times',
+                'Times New Roman', 'Verdana'],
+              fontTarget = $('[title=Font]').siblings('.dropdown-menu');
+      $.each(fonts, function (idx, fontName) {
+        fontTarget.append($('<li><a data-edit="fontName ' + fontName + '" style="font-family:\'' + fontName + '\'">' + fontName + '</a></li>'));
+      });
+      $('a[title]').tooltip({container: 'body'});
+      $('.dropdown-menu input').click(function () {
+                return false;
+              })
+              .change(function () {
+                $(this).parent('.dropdown-menu').siblings('.dropdown-toggle').dropdown('toggle');
+              })
+              .keydown('esc', function () {
+                this.value = '';
+                $(this).change();
+              });
+
+      $('[data-role=magic-overlay]').each(function () {
+        var overlay = $(this), target = $(overlay.data('target'));
+        overlay.css('opacity', 0).css('position', 'absolute').offset(target.offset()).width(target.outerWidth()).height(target.outerHeight());
+      });
+      if ("onwebkitspeechchange" in document.createElement("input")) {
+        var editorOffset = $('#editor').offset();
+        $('#voiceabtn').css('position', 'absolute').offset({
+          top: editorOffset.top,
+          left: editorOffset.left + $('#editor').innerWidth() - 35
+        });
+      } else {
+        $('#voiceabtn').hide();
+      }
+    };
+
+//dfdfsddfsd
+    var uploadFiles = [];
+    $("#picture-select").change(function () {
+      $.each(this.files, function (index, fileObj) {
+        uploadFiles.push(fileObj);
+      });
+      a();
+    });
+
+//    $('#editor').wysiwyg();
+
+
+// 点击提交后处理:
+    function a() {
+      for (var i = 0; i < uploadFiles.length; i++) {
+        var fileObj = uploadFiles[i];
+        // 判断图片是否存在
+        readFileIntoDataUrl(fileObj).done(function (dataUrl) {
+          var imgTag = $("#editor").find("img[src='" + dataUrl + "']");
+          if (imgTag.length > 0) {
+            // 图片存在, 上传当前文件.
+            // uploadImage方法为你的上传图片方法.
+            var url = i + i;
+            imgTag.attr("src", url);
+
+          }
+        });
+      }
+    }
+
+    var readFileIntoDataUrl = function (fileInfo) {
+      var loader = $.Deferred(),
+              fReader = new FileReader();
+      fReader.onload = function (e) {
+        loader.resolve(e.target.result);
+      };
+      fReader.onerror = loader.reject;
+      fReader.onprogress = loader.notify;
+      fReader.readAsDataURL(fileInfo);
+      return loader.promise();
+    };
+    /*dfdfddfdf*/
+
+
+    initToolbarBootstrapBindings();
+    $('#editor').wysiwyg();
+    $('#editor').cleanHtml()
+  });
+</script>
+</body>
+</html>

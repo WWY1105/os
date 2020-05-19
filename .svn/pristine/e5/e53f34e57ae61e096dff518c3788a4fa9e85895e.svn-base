@@ -1,0 +1,44 @@
+<div class="contents bgw">
+	<table class="table table-bordered table-striped text-center" ng-if="view.versions.items">
+		<thead>
+			<tr class="info">
+				<th>序号</th>
+				<th>产品</th>
+				<th>平台</th>
+				<th>版本</th>
+				<th>升级内容</th>
+				<th>下载地址</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="version in view.versions.items">
+				<td ng-bind="$index+1"></td>
+				<td ng-bind="view.product[version.product]"></td>
+				<td ng-bind="view.platform[version.plateform]"></td>
+				<td ng-bind="version.name"></td>
+				<td align="left" width="35%" style="word-break:break-all;">
+					<ul>
+						<li ng-repeat="item in formatCtx(version.content)" ng-bind="item"></li>
+					</ul>
+				</td>
+				<td >
+					<a  href="{{version.url}}">下载</a>
+				</td>
+				<td>
+					<a class="click del" ng-click="delete(version.id)"><i class="glyphicon glyphicon-remove"></i>删除</a>
+				</td>
+
+			</tr>
+		</tbody>
+	</table>
+	<div class="col-sm-8 " ng-if="view.versions.items">
+            <pagination items-per-page="view.versions.count" boundary-links="true" total-items="view.versions.total" ng-model="view.versions.page" class="pagination-sm" previous-text="&lsaquo;" ng-change="pageChange()" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+            </pagination>
+
+    </div>
+
+    <div class="col-sm-3">
+		<button class="btn btn-primary" ng-click="create()">新增版本</button>
+	</div>
+</div>

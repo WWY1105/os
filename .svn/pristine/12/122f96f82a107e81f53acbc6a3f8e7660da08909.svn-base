@@ -1,0 +1,103 @@
+<form class="row" enctype="multipart/form-data">
+
+    <div class="col-md-12">
+        <div class="col-sm-12 form-horizontal">
+            <div class="form-group">
+                <label for="product" class="col-sm-3 control-label text-right">
+                    <span class="text-red">*</span> 名称
+                </label>
+                <div class="col-sm-9" id="product">
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="radio-inline">
+                                <input type="text" class="form-control col-md-10" ng-model="view.name" />
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  -->
+    <div class="col-md-12">
+        <div class="col-sm-12 form-horizontal">
+            <div class="form-group">
+                <label for="product" class="col-sm-3 control-label text-right">
+                    <span class="text-red">*</span> 选择现金活动
+                </label>
+                <div class="col-sm-9" id="product">
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="radio-inline" style="width: 70%;">
+                                <select type="text" class="form-control col-md-10" ng-model="view.activityId" required  ng-options="item.id as item.name for item in view.activities">
+                                    <!-- <option value="" ng-repeat="item in view.activities" value="{{item.id}}">{{item.name}}</option> -->
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="col-sm-12 form-horizontal">
+            <div class="form-group">
+                <label for="product" class="col-sm-3 control-label text-right">
+                    <span class="text-red">*</span> 红包总数
+                </label>
+                <div class="col-sm-9" id="product">
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="radio-inline">
+                                <input type="text" class="form-control col-md-10" ng-model="view.countLimit"/>
+                               <span class="text-danger"> (红包总数:1-10000)</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  -->
+    <div class="col-md-12">
+        <div class="col-sm-12 form-horizontal">
+            <div class="form-group">
+                <label for="product" class="col-sm-3 control-label text-right">
+                    <span class="text-red">*</span>现金设置
+                </label>
+                <div class="col-sm-9" id="product">
+                    <div class="col-sm-12">
+                        <p style="display: flex;align-content: center;">
+                             <span class="col-sm-6">
+                                <span>发起者可获得现金(元):</span>
+                                <span class="text-danger"> (0.01-100)</span>
+                            </span> 
+                            <input type="text" class="form-control col-md-6" ng-model="view.rebates.value">
+                        </p>
+                        <p style="display: flex;align-content: center;">
+                            <span class="col-sm-6">领取者可获得现金(元): 
+                                    <span class="text-danger"> (0.01-100)</span>
+                            </span><input ng-model="view.rebates.participants" type="text" class="form-control col-md-6">
+                        </p>
+                        <p style="display: flex;align-content: center;">
+                            <span class="col-sm-6"> 每当有一个有效领取现金红包时,红包发起者可获得现金返利 (元):<span class="text-danger"> (0.01-100)</span></span> 
+                            <input type="text" class="form-control col-md-6" ng-model="view.personDetail[0].amount">
+                            <input type="text" class="form-control col-md-6" style="display:none" value="1"  readonly ng-model="view.personDetail[0].count">
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-10 col-sm-offset-2">
+        <div class="row">
+          <div class="col-sm-3">
+            <a class="btn btn-default btn-block btn_back" back-button>返回</a>
+          </div>
+          <div class="col-sm-3 col-sm-offset-1">
+            <button class="btn btn-primary btn-block" ng-click="submitFn()">确定</button>
+          </div>
+        </div>
+      </div>
+</form>

@@ -1,0 +1,25 @@
+
+ <div class="container">
+				<div class="col-md-12">
+					<div class="row">
+					<div class="col-md-5 img">
+						<div class="row">
+
+							<div class="col-sm-1">
+								<img src="/public/img/icon.png" height=40/>
+							</div>
+							<div class="col-sm-7 header-title text-left">
+								上宾运营管理系统
+							</div>
+						</div>
+					</div>
+
+
+
+					<div class=" pull-right logout">
+					   <span class="header_user_name"></span>
+					   <A href="/my/password.html">修改密码</A><!--
+    --><A class="click" onclick="logout()">退出登陆</A>
+					</div>
+				</div>
+			</div>

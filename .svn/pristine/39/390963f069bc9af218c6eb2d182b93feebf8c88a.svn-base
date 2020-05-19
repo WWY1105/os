@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/public/css/style.css" />
+    <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <header></header>
+    <div class="container">
+        <div class="col-md-2 left_menu"></div>
+        <div class="col-md-10 right_content">
+            <div class="col-md-12">
+                <ol class="breadcrumb">
+                    <li class="active">
+                        <a href="/system/user.html">用户管理</a>
+                    </li>
+                    <li>添加用户</li>
+                </ol>
+            </div>
+            <form class="user_add" method="post" role="form">
+                <div class="col-md-12 ">
+                    <div class="form-horizontal col-md-10">
+                        <div class="form-group  ">
+                            <label for="inputEmail3" class="col-sm-2 control-label text-right"></label>
+                            <div class="col-sm-5">
+                                <span class=" error   text-left"></span>
+                            </div>
+                        </div>
+                        <div class="form-group  ">
+                            <label for="inputEmail3" class="col-sm-2 control-label text-right">类型</label>
+                            <div class="col-sm-5">
+                                <select class="form-control" name="type"></select>
+                            </div>
+                        </div>
+                        <div class="form-group  has-feedback name">
+                            <label for="inputEmail3" class="col-sm-2 control-label text-right"><span class="error">*</span>账号</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" name="name" maxlength="20" />
+                            </div>
+                            <span class="col-sm-5 control-label text-left error_text">6-16位，以字母开头</span>
+                        </div>
+                        <div class="form-group  has-feedback  password ">
+                            <label for="inputEmail3" class="col-sm-2 control-label text-right"><span class="error">*</span>密码</label>
+                            <div class="col-sm-5">
+                                <div class="input-group">
+                                    <input type="password" class="form-control eye_in" name="password" maxlength="20" />
+                                    <div class="input-group-addon"> <i class="glyphicon glyphicon-eye-open open_eye"></i>
+                                    </div>
+                                </div>
+                                <div class="eye"></div>
+                            </div>
+                            <span class="col-sm-5 control-label text-left error_text">8-20位英文、字符或数字</span>
+                        </div>
+                        <div class="form-group  nickname">
+                            <label for="inputEmail3" class="col-sm-2 control-label text-right"><span class="error">*</span>昵称</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" name="nickname" maxlength="20" />
+                            </div>
+                            <span class="col-sm-5 control-label text-left error_text">4-20位汉字、英文或字符，不允许使用空格</span>
+                        </div>
+                    </div>
+                    <div class=" col-md-10 submite">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-3">
+                            <a class="btn btn-primary btn-block add_user" onclick="add_user()">提交</a>
+                        </div>
+                        <div class="col-sm-3">
+                            <a class="btn btn-default btn-block" href="/system/user.html">返回</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal " id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">添加成功</h4>
+                </div>
+                <div class="modal-body">
+                    已经添加新的用户,如需添加新的用户请点击继续添加。
+                    <br>如不需要请点击返回,将返回用户列表。</div>
+                <div class="modal-footer">
+                    <a class="btn btn-primary" href="/system/user.html">返回用户列表</a>
+                    <a type="button" class="btn btn-default" data-dismiss="modal" onclick="clear_input()">继续添加</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="/public/js/jqcookie.js"></script>
+<script type="text/javascript" src="/public/js/md5-min.js"></script>
+<script type="text/javascript" src="/public/js/main.js"></script>
+<script>
+$(function() {
+    for (var key in role_type[config.role.type]) {
+        $("select[name=type]").append("<option value='" + key + "'>" + role[key] + "</option>");
+
+    }
+    $(".open_eye").parent().hover(function() {
+        $(".eye").text($(".eye_in").val());
+        $(".eye").height(26);
+    }, function() {
+        $(".eye").text("");
+        $(".eye").height(0);
+    });
+})
+
+function add_user() {
+    obj_name = $(".user_add input[name=name]");
+    obj_password = $(".user_add input[name=password]");
+    obj_nickname = $(".user_add input[name=nickname]");
+
+    name = new text_check_new().user_name_check(obj_name);
+    password = new text_check_new().user_password_check(obj_password);
+    nickname = new text_check_new().user_nickname_check(obj_nickname);
+    type = $(".user_add select[name=type]").val();
+    if (!name || !password || !nickname) {
+        $(".error").text("您输入的内容有错误，请检查！");
+        return;
+    }
+    json = {
+        "name": name,
+        "password": hex_md5(password),
+        "nickname": nickname,
+        "type": type
+    };
+//    jsons = JSON.stringify(json);
+    data3 = ajax_send(json, "/user", "POST");
+    if (data3.code != 200) {
+        $(".error").text(data.message);
+        return false;
+    }
+    $("#myModal").modal();
+}
+</script>
+</body>
+
+</html>

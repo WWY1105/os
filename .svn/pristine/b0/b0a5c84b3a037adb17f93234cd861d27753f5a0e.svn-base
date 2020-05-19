@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <!--[if lte IE 8]>
+  <script>window.location.href = '/upload.html';</script>
+  <![endif]-->
+  <!--[if lte IE 7]>
+  <script>window.location.href = '/upload.html';</script>
+  <![endif]-->
+  <!--[if lte IE 6]>
+  <script>window.location.href = '/upload.html';</script>
+  <![endif]-->
+  <title>用户管理</title>
+  <link rel="stylesheet" href="/public/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/public/css/style.css"/>
+  <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/public/js/jqcookie.js"></script>
+<style>
+  img{
+    width: 50px;
+  }
+</style>
+</head>
+
+<body>
+<header></header>
+<div class="container">
+  <div class="col-md-2 left_menu"></div>
+  <div class="col-md-10 right_content">
+    <div class="col-md-12">
+      <ol class="breadcrumb">
+        <li class="active">
+          <a href="/customer/index.html">顾客管理</a>
+        </li>
+        <li>浏览</li>
+      </ol>
+    </div>
+    <div class="col-md-12 check_list">
+      <table class="table table-bordered result text-center">
+        <tr class="info ">
+          <th width=60>
+            <a class="check_all click" onclick="check_all('user_result')">全选</a>
+          </th>
+          <th>头像</th>
+          <th>手机号</th>
+          <th>昵称</th>
+          <th>性别</th>
+          <th>加入时间</th>
+          <!--<th width=200>操作</th>-->
+        </tr>
+      </table>
+    </div>
+    <div class=" results col-md-12">
+      <div class="row">
+        <div class="col-md-3">
+          <!--<a class="btn  btn-danger btn-half del_all" onclick="del_all()">删除</a>-->
+          <!--<a class="btn  btn-primary btn-half" href="/game/add.html">新增</a>-->
+        </div>
+        <div class="col-md-6">
+          <ul class="pagination page"></ul>
+        </div>
+        <div class="col-md-3 pagesize text-left"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" src="/public/js/md5-min.js"></script>
+<script type="text/javascript" src="/public/js/main.js"></script>
+<script>
+  $(function () {
+    data = new search_result({
+      page: 1, count: 10
+    }, "/customers", "GET");
+    data.customer_show();
+    if (config.role.type == "M") {
+      $("select[name=type]").append("<option value='K'>" + role.K + "</option><option value='S'>" + role.S + "</option>");
+    } else {
+      $(".select-type").remove();
+    }
+  })
+
+  function del_all() {
+    var re = new Array();
+    $(".result input[name='result_id[]']").each(function () {
+      if ($(this).prop('checked') == true) re.push($(this).val());
+    });
+
+    if (re.length > 0) {
+      res = re.join(",");
+      data = ajax_send({ids: res}, "/game/ids", "POST");
+      if (data.code == 200) {
+        alert("删除成功");
+      } else {
+        alert(data.message);
+      }
+      for (i = 0; i < re.length; i++) {
+        $("#result_id_" + re[i]).remove();
+      }
+    }
+  }
+</script>
+</body>
+
+</html>

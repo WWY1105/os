@@ -1,0 +1,53 @@
+<div class="col-md-12">
+  <div class="form-horizontal">
+
+    <div ng-if="view.detail&&view.detail.cashierShopId" class="alert alert-warning" role="alert">
+      已绑定门店：{{view.detail.cashierShopId}} {{view.detail.name}}（{{view.detail.address}}）
+      <a style="margin-top: -10px" class="btn btn-primary pull-right" ng-click="unbind()">取消绑定</a>
+    </div>
+    <div class="col-sm-12">
+      <div class="form-group col-sm-8">
+        <label class="control-label pull-left">
+          收银系统
+        </label>
+        <div class="col-sm-10">
+          <div class="row">
+            <div class="col-sm-8">
+              <select ng-model="post.cashierType" class="form-control" ng-change="selectFn()"
+                      ng-options="item.code as item.text for item in view.type" name="member" required>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group  col-sm-4">
+        <button class="btn btn-primary" ng-click="sync()">从收银系统同步门店</button>
+      </div>
+    </div>
+  </div>
+  <table class="table table-bordered result table-hover ">
+    <tr class="info">
+      <th width=20></th>
+      <th width=100>门店id</th>
+      <th width=100>名称</th>
+      <th width=500>地址</th>
+      <th width=80>电话</th>
+      <th width=80>操作</th>
+    </tr>
+    <tr class="show-modle" ng-repeat="item in view.shops.items">
+      <td ng-bind="$index"></td>
+      <td ng-bind="item.cashierShopId"></td>
+      <td ng-bind="item.name"></td>
+      <td ng-bind="item.address"></td>
+      <td ng-bind="item.tel"></td>
+      <td>
+        <a class="click zone" id="update" ng-click="bind($index)"> <i
+                class="glyphicon glyphicon-ok"></i> 绑定
+        </a>
+      </td>
+    </tr>
+    <tr ng-if="!view.shops.items">
+      <td colspan=6>暂无数据</td>
+    </tr>
+  </table>
+</div>

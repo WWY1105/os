@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8"/>
+  <title></title>
+  <link rel="stylesheet" href="/public/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/public/css/style.css"/>
+  <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<header></header>
+<div class="container">
+  <div class="col-md-2 left_menu"></div>
+  <div class="col-md-10 right_content">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-3">
+          <a class="btn  btn-primary btn-half" onclick="add_new()">新增</a>
+        </div>
+        <div class="col-md-6 text-center">
+          <ul class="pagination page"></ul>
+        </div>
+        <div class="col-md-3"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="modal" id="dialog_edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">新增字典</h4>
+      </div>
+      <div class="modal-body form-horizontal">
+        <div class="form-group mnemonic ">
+          <label for="inputEmail3" class="col-sm-3 control-label text-right">字典助记符</label>
+          <div class="reset_mnemonic col-sm-5">
+            <input class="form-contro " type="text" name="reset_mnemonic" />
+          </div>
+          <div class="has-error col-md-4 form-control-static  error_text"></div>
+        </div>
+        <div class="form-group name">
+          <label for="inputEmail3" class="col-sm-3 control-label text-right">字典名称</label>
+          <div class="col-sm-5 ">
+            <input class="form-control " type="text" name="reset_name" />
+          </div>
+          <div class="has-error col-md-4 form-control-static  error_text"></div>
+        </div>
+        <div class="form-group  remark">
+          <label for="inputEmail3" class="col-sm-3 control-label text-right">备注</label>
+          <div class="col-sm-5">
+                            <textarea class="form-control " name="reset_remark">
+                            </textarea>
+          </div>
+          <div class="has-error col-md-3 form-control-static error_text"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary click submit">确认</a>
+        <button type="button" class="btn btn-default" data-dismiss="modal">返回</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="/public/js/jqcookie.js"></script>
+<script type="text/javascript" src="/public/js/md5-min.js"></script>
+<script type="text/javascript" src="/public/js/main.js"></script>
+<script>
+  //  $(function () {
+  //    for (var key in role_type[config.role.type]) {
+  //      $("select[name=type]").append("<option value='" + key + "'>" + role[key] + "</option>");
+  //
+  //    }
+  //    $(".open_eye").parent().hover(function () {
+  //      $(".eye").text($(".eye_in").val());
+  //      $(".eye").height(26);
+  //    }, function () {
+  //      $(".eye").text("");
+  //      $(".eye").height(0);
+  //    });
+  //  })
+
+  function add_game() {
+    var json = {};
+    for (var i = 0; i < $("input").size(); i++) {
+      if ($("input")[i].value) {
+        json[$("input")[i].name] = $("input")[i].value;
+      } else {
+        $(".error.text-left").text("您输入的内容有错误，请检查！");
+        return;
+      }
+    }
+    if ($("textarea").val().length < 500) {
+      json.description = $("textarea").val();
+    } else {
+      $(".error.text-left").text("您输入的描述大于500字");
+      return;
+    }
+    var data = ajax_send(JSON.stringify(json), "/game", "POST");
+    if (data.code != 200) {
+      $(".error.text-left").text(data.message);
+      return false;
+    } else {
+      alert("添加成功！");
+    }
+
+//    obj_name = $(".user_add input[name=name]");
+//    obj_password = $(".user_add input[name=password]");
+//    obj_nickname = $(".user_add input[name=nickname]");
+//
+//    name = new text_check_new().user_name_check(obj_name);
+//    password = new text_check_new().user_password_check(obj_password);
+//    nickname = new text_check_new().user_nickname_check(obj_nickname);
+//    type = $(".user_add select[name=type]").val();
+//    if (!name || !password || !nickname) {
+//      $(".error").text("您输入的内容有错误，请检查！");
+//      return;
+//    }
+//    json = {
+//      "name": name,
+//      "password": hex_md5(password),
+//      "nickname": nickname,
+//      "type": type
+//    };
+//    jsons = JSON.stringify(json);
+//    data3 = ajax_send(jsons, "/user", "POST");
+//    if (data3.code != 200) {
+//      $(".error").text(data.message);
+//      return false;
+//    }
+//    $("#myModal").modal();
+  }
+</script>
+</body>
+
+</html>
