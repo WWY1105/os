@@ -19,9 +19,19 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="item in view.messages">
+                <tr ng-repeat="item in view.messages[1]">
                     <td class="col-sm-1" ng-bind="$index"></td>
-                    <td class="col-sm-1">{{item.contractVersion==1?'1.0版本':'3.0版本'}}</td>
+                    <td class="col-sm-1">1.0版本</td>
+                    <td class="col-sm-1" ng-bind="item.name"></td>
+                    <td class="col-sm-1" ng-bind="item.business"></td>
+                  
+                    <td class="col-sm-2"><button class="btn  btn-default btn-primary update"
+                            ng-click="auditbtn(item)">修改</button><button class="btn  btn-danger btn-primary update"
+                            ng-click="del(item.id)">删除</button></td>
+                </tr>
+                <tr ng-repeat="item in view.messages[3]">
+                    <td class="col-sm-1" ng-bind="$index"></td>
+                    <td class="col-sm-1">3.0版本</td>
                     <td class="col-sm-1" ng-bind="item.name"></td>
                     <td class="col-sm-1" ng-bind="item.business"></td>
                   

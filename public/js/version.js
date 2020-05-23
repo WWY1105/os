@@ -212,11 +212,14 @@ function appRouteConfig($routeProvider) { //路由规则
             templateUrl: "/admin/user/activity.html",
             controller: "userActivityCtr"
         }).when('/user/shareList/', { // 分享金列表
-            templateUrl: "/admin/user/shareList.html",
+            templateUrl: "/admin/chargeAcount.html",
             controller: "userShareListCtr"
         }).when('/user/share/:rebatesId', { // 分享金管理(修改)
             templateUrl: "/admin/user/share.html",
             controller: "userShareCtr"
+        }).when('/user/chargeAcount/', { // 充值账户chargeAcountCtr
+            templateUrl: "/admin/user/chargeAcount.html",
+            controller: "chargeAcountCtr"
         }).when('/user/share', { // 分享金管理(添加)
             templateUrl: "/admin/user/share.html",
             controller: "userShareCtr"
@@ -259,6 +262,7 @@ function appRouteConfig($routeProvider) { //路由规则
         }).when('/accounts', { //分账管理
             templateUrl: "../accounts/show.html",
             controller: "accountsCtr"
+
         }).when('/brokerage/:id/:name', {
             templateUrl: "../brokerage/show.html",
             controller: "brokerageCtr"
@@ -448,13 +452,13 @@ app.controller('messageTemplateShowCtr', ['$scope', '$location', 'messageTemplat
         $scope.view.messagesTemplate = res.result;
     });
     $scope.create = function () {
-        sessionStorage.setItem('editItem',null)
+        sessionStorage.setItem('editItem', null)
         $location.path("/messagesTemplate/add");
     }
     // 修改
-    $scope.edit=function(index){
-        $location.path("/messagesTemplate/add/"+$scope.view.messagesTemplate[index].id);
-        sessionStorage.setItem('editItem',JSON.stringify($scope.view.messagesTemplate[index]))
+    $scope.edit = function (index) {
+        $location.path("/messagesTemplate/add/" + $scope.view.messagesTemplate[index].id);
+        sessionStorage.setItem('editItem', JSON.stringify($scope.view.messagesTemplate[index]))
 
     }
     $scope.delete = function (index) {
@@ -482,77 +486,79 @@ app.controller('messageTemplateShowCtr', ['$scope', '$location', 'messageTemplat
     };
 }]);
 
-app.controller('messageTemplateAddCtr', ['$scope', '$location', 'messageTemplateFactory','$routeParams','$http', function ($scope, $location, msgFac,$routeParams,$http) {
-    $scope.view={
-        category:[]
+app.controller('messageTemplateAddCtr', ['$scope', '$location', 'messageTemplateFactory', '$routeParams', '$http', function ($scope, $location, msgFac, $routeParams, $http) {
+    $scope.view = {
+        category: []
     }
     $scope.posts = {
         type: '',
-        channel:1,
-        templateIdShort:"",
-        industry:'',
-        path:'',
-        minAppId:'',
-        pages:'',
-        title:'',
-        content:''
+        channel: 1,
+        templateIdShort: "",
+        industry: '',
+        path: '',
+        minAppId: '',
+        pages: '',
+        title: '',
+        content: ''
 
     };
-    $scope.editId=$routeParams.id;
-    
+    $scope.editId = $routeParams.id;
+
     msgFac.getCategory(function (res) {
         // 把要修改的项目复制过来显示
-        if(sessionStorage.getItem('editItem')){
-            $scope.posts={...JSON.parse(sessionStorage.getItem('editItem'))}
+        if (sessionStorage.getItem('editItem')) {
+            $scope.posts = {
+                ...JSON.parse(sessionStorage.getItem('editItem'))
+            }
         }
-       
-        let arr=[];
-        for(var i in res.result){
-            let obj={};
-            obj.key=i;
-            obj.value=res.result[i];
+
+        let arr = [];
+        for (var i in res.result) {
+            let obj = {};
+            obj.key = i;
+            obj.value = res.result[i];
             arr.push(obj)
         }
         $scope.view.category = arr;
     });
     $scope.add_form = {};
     // 当渠道选择了"公众号",且填写了小程序页面路径得时候
-    $scope.typeMsg='用户点击消息后将直接打开小程序，若此时，客户的公众号未与配置小程序进行关联，则不会推送此条模版消息';
+    $scope.typeMsg = '用户点击消息后将直接打开小程序，若此时，客户的公众号未与配置小程序进行关联，则不会推送此条模版消息';
     // 当渠道选择了"小程序",
-    $scope.typeMsg1='';
+    $scope.typeMsg1 = '';
     // 新增/修改
     $scope.postSend = function () {
         // 渠道选择了
-        if($scope.posts.channel==1&&($scope.posts.path.trim()==''||$scope.posts.industry.trim()=='')){
+        if ($scope.posts.channel == 1 && ($scope.posts.path.trim() == '' || $scope.posts.industry.trim() == '')) {
             alert('公众号模板,跳转页面和所属行业必填');
             return;
         }
         // 渠道选择了小程序
-        if($scope.posts.channel ==2&&($scope.posts.minAppId.trim()==''||$scope.posts.path.trim()=='')){
+        if ($scope.posts.channel == 2 && ($scope.posts.minAppId.trim() == '' || $scope.posts.path.trim() == '')) {
             alert('小程序APPID以及小程序页面必填');
             return;
         }
-        if(!$routeParams.id){
+        if (!$routeParams.id) {
             msgFac.add(angular.toJson($scope.posts), function (res) {
                 if (res.code !== 200) {
                     alert("出错了");
                 } else {
-                    sessionStorage.setItem('editItem',null)
+                    sessionStorage.setItem('editItem', null)
                     $location.path("/messageTemplate");
                 }
             });
-        }else{
+        } else {
             $http.put(basic_url + '/templates/' + $routeParams.id + '?' + getUrl(), $scope.posts).success(function (data) {
                 if (data.code == 200) {
                     alert("操作成功！");
-                    sessionStorage.setItem('editItem',null)
+                    sessionStorage.setItem('editItem', null)
                     $location.path("/messageTemplate");
                 } else {
                     alert(data.message);
                 }
             });
         }
-        
+
         console.log($scope.posts)
     }
 
@@ -880,7 +886,7 @@ app.controller('userCasherCtr', ['$scope', '$location', '$http', '$routeParams',
                 alert("操作成功");
                 $scope.pageChange();
             } else {
-                alert(data.messages);
+                alert(res.messages);
             }
         })
 
@@ -898,6 +904,130 @@ app.controller('userCasherCtr', ['$scope', '$location', '$http', '$routeParams',
     }
 
 }]);
+// 充值账户
+app.controller('chargeAcountCtr', ['$scope', '$location', '$http', '$routeParams', function ($scope, $location, $http, $routeParams) { //
+    $scope.config.name = "充值账户";
+    $scope.config.url = "/user/chargeAcount.html";
+    $scope.view = {
+        list: []
+    };
+    $scope.business = '';
+    $scope.acount = '';
+    $scope.targetObj = {
+
+    }
+
+
+    // 账户列表
+    $http.get(basic_url + '/guest/' + $routeParams.id + '/accounts?' + getUrl()).success(function (res) {
+        if (res.code == 200) {
+            $scope.view.list = res.result;
+        }
+    });
+    // 获取业务
+    $http.get(basic_url + '/allocate/business?' + sortUrl($scope.param)).success(function (res) {
+        if (res.code == 200) {
+            $scope.types = res.result;
+            // 获取业务对应的文字
+            $scope.filterfn = function (code) {
+                for (var i = 0; i < $scope.types.length; i++) {
+                    if ($scope.types[i].code == code) {
+                        return $scope.types[i].text
+                    }
+                }
+            }
+        }
+    });
+
+    // 弹出新增弹窗
+    $scope.addAcount = function () {
+        $scope.targetObj={}
+        $('#dialog').show()
+    }
+    $scope.closeAcount = function () {
+        $('#dialog').hide()
+    }
+    // 提交弹窗内容
+    $scope.submitFn = function () {
+        if (!$scope.targetObj.business || !$scope.targetObj.amount) {
+            alert('请填写完整信息');
+            return;
+        }
+        $http.post(basic_url + '/guest/' + $routeParams.id + '/accounts?' + getUrl(), $scope.targetObj).success(function (res) {
+            if (res.code == 200) {
+                alert('添加成功');
+                $('#dialog').hide()
+                // 账户列表
+                $http.get(basic_url + '/guest/' + $routeParams.id + '/accounts?' + getUrl()).success(function (res) {
+                    if (res.code == 200) {
+                        $scope.view.list = res.result;
+                    }
+                });
+            } else {
+                alert(res.message);
+            }
+        });
+    }
+    // 查看明细
+    $scope.seeDetail = function (item) {
+        $('#dialogDetail').show();
+        // 获取明细
+        // 获取明细
+       
+        $scope.detailId=item.id;
+        $http.get(basic_url + '/guest/' + $routeParams.id + '/accounts/'+item.id+'/records?'+ getUrl()+'&count=10').success(function (res) {
+            if (res.code == 200) {
+                $scope.detailObj = res.result;
+            }
+        });
+
+    }
+    // 明细分账改变
+    $scope.pageChange = function () {
+        var json = {
+            page: $scope.detailObj.page
+        };
+        $http.get(basic_url + '/guest/' + $routeParams.id + '/accounts/'+ $scope.detailId+'/records?'+ getUrl()+'&count=10&'+$scope.jsonToUrl(json)).success(function (res) {
+            if (res.result) {
+                $scope.detailObj = res.result;
+            }
+        });
+    };
+    // 点击充值
+    $scope.toCharge=function (item) {
+        $('#dialog_charge').show();
+        $scope.editObj=item;
+    }
+    // 关闭查看充值明细弹窗
+    $scope.closeCharge= function () {
+        $('#dialog_charge').hide();
+    }
+    // 充值确认
+    $scope.submitChargeFn=function() {
+        $http.put(basic_url + '/guest/' + $routeParams.id + '/accounts/'+$scope.editObj.id+'?' + getUrl(), {'amount':$scope.editObj.amount}).success(function (res) {
+            if (res.code == 200) {
+                alert('充值成功');
+                $('#dialog_charge').hide();
+                // 账户列表
+                $http.get(basic_url + '/guest/' + $routeParams.id + '/accounts?' + getUrl()).success(function (res) {
+                    if (res.code == 200) {
+                        $scope.view.list = res.result;
+                    }
+                });
+            } else {
+                alert(res.messages);
+            }
+        });
+    }
+   
+    // 关闭查看充值明细弹窗
+    $scope.closeDetail= function () {
+        $('#dialogDetail').hide();
+    }
+    
+
+}]);
+
 // 
 // 分享金列表管理
 app.controller('userShareListCtr', ['$scope', '$location', '$http', '$routeParams', function ($scope, $location, $http, $routeParams) { //
@@ -969,20 +1099,18 @@ app.controller('userShareCtr', ['$scope', '$location', '$http', '$routeParams', 
     $scope.config.url = "/user/share.html";
     $scope.view = {
         name: '',
-        randomly:'false',// 固定金额
+        randomly: 'false', // 固定金额
         rebates: [{
-            mode:'1',
+            mode: '1',
             amount: '',
             count: '1'
         }],
-        participants:[
-            {
-                min: '',
-                max: '',
-                count: '',
-                probability: ''
-            }
-        ]
+        participants: [{
+            min: '',
+            max: '',
+            count: '',
+            probability: ''
+        }]
     }
     $scope.username = $routeParams.name
     $scope.post = {
@@ -1006,17 +1134,17 @@ app.controller('userShareCtr', ['$scope', '$location', '$http', '$routeParams', 
                 if (arr.length > 0) {
                     $scope.view.name = arr[0].name;
                     $scope.view.amount = arr[0].amount;
-                    $scope.view.randomly = arr[0].randomly+'';
+                    $scope.view.randomly = arr[0].randomly + '';
                     $scope.view.activityId = arr[0].activityId;
                     $scope.view.countLimit = arr[0].countLimit;
                     $scope.view.id = $routeParams.rebatesId;
                     $scope.view.personDetail = arr[0].personDetail;
                     $scope.view.rebates = arr[0].rebates;
-                    if(arr[0].participants){
-                        $scope.view.participants=arr[0].participants
+                    if (arr[0].participants) {
+                        $scope.view.participants = arr[0].participants
                     }
-                    if(arr[0].partAmount){
-                        $scope.view.partAmount=arr[0].partAmount
+                    if (arr[0].partAmount) {
+                        $scope.view.partAmount = arr[0].partAmount
                     }
                 }
 
@@ -1025,9 +1153,9 @@ app.controller('userShareCtr', ['$scope', '$location', '$http', '$routeParams', 
             console.log($scope.view)
         });
     }
-    $scope.randomlyChange=function(){
-         console.log($scope.view.randomly=='true')
-        console.log($scope.view.randomly=='false')
+    $scope.randomlyChange = function () {
+        console.log($scope.view.randomly == 'true')
+        console.log($scope.view.randomly == 'false')
         // if($scope.view.randomly=='true'){
         //     console.log('1')
         //     $('.norandomBox').css('display','block');//固定金额
@@ -1037,19 +1165,19 @@ app.controller('userShareCtr', ['$scope', '$location', '$http', '$routeParams', 
         //     $('.norandomBox').css('display','none');//固定金额
         //     $('.randomBox').css('display','block');//随机金额
         // }
-        
+
     }
     // 添加规则
-    $scope.addParticipants=function(){
+    $scope.addParticipants = function () {
         $scope.view.participants.push({
             min: 0,
-            max:0,
+            max: 0,
             count: 0,
             probability: 0
         })
     }
-    $scope.removeParticipants=function(index){
-        $scope.view.participants.splice(index,1)
+    $scope.removeParticipants = function (index) {
+        $scope.view.participants.splice(index, 1)
     }
 
     // 点击确定
@@ -1057,7 +1185,7 @@ app.controller('userShareCtr', ['$scope', '$location', '$http', '$routeParams', 
         delete $scope.view.activities
         var json = $scope.view;
         // json.randomly=Boolean(json.randomly);
-        if(json.randomly=='false'){
+        if (json.randomly == 'false') {
             delete json.participants
         }
         if ($routeParams.rebatesId) {
@@ -1461,7 +1589,7 @@ app.controller('dealCtr', ['$scope', '$location', 'messageFactory', '$http', '$f
                 $scope.view.messages = res.result;
                 $('#loadingDiv').hide();
             } else {
-                $scope.view.messages =null;
+                $scope.view.messages = null;
                 $('#loadingDiv').hide();
             }
         });
@@ -2060,7 +2188,7 @@ app.controller('accountsCtr', ['$scope', '$location', 'messageFactory', '$http',
         });
     };
     $scope.submit = function () {
-        console.log($scope.posts.type +'&&'+ $scope.posts.accountIn +'&&'+ $scope.posts.bankName +'&&'+ $scope.posts.cardNo +'&&'+ $scope.posts.name)
+        console.log($scope.posts.type + '&&' + $scope.posts.accountIn + '&&' + $scope.posts.bankName + '&&' + $scope.posts.cardNo + '&&' + $scope.posts.name)
         if ($scope.posts.type && $scope.posts.accountIn && $scope.posts.bankName && $scope.posts.cardNo && $scope.posts.name) {
             $http.post(basic_url + '/allocate?' + sortUrl(), $scope.posts).success(function (res) {
                 if (res.code == 200) {
@@ -2132,7 +2260,7 @@ app.controller('userAcountsRuleCtr', ['$scope', '$location', 'messageFactory', '
             contractSsn: '',
             reason: '',
             descriptor: '',
-           
+
             mchId: $routeParams.mchId
         };
     }
@@ -2171,7 +2299,7 @@ app.controller('userAcountsRuleCtr', ['$scope', '$location', 'messageFactory', '
 
     }
     $scope.post = function (id) {
-        let url= basic_url + '/guest/' + $routeParams.id + '/allocates/' + id + '/import?' + sortUrl()
+        let url = basic_url + '/guest/' + $routeParams.id + '/allocates/' + id + '/import?' + sortUrl()
         $http.post(url).success(function (res) {
             if (res.code == 200) {
                 alert('发布成功')
@@ -2196,22 +2324,31 @@ app.controller('userAcountsRuleCtr', ['$scope', '$location', 'messageFactory', '
     }
     // 弹窗保存
     $scope.addsubmit = function () {
-        console.log($scope.post)
-        console.log($scope.view.rules)
+
         let unitArr = [];
-        for (let i in $scope.view.rules) {
-            if ($scope.view.rules[i].checked) {
-                unitArr.push($scope.view.rules[i].id)
+        if ($scope.view.rules[1]) {
+            for (let i in $scope.view.rules[1]) {
+                if ($scope.view.rules[1][i].checked) {
+                    unitArr.push($scope.view.rules[1][i].id)
+                }
             }
         }
+        if ($scope.view.rules[3]) {
+            for (let i in $scope.view.rules[3]) {
+                if ($scope.view.rules[3][i].checked) {
+                    unitArr.push($scope.view.rules[3][i].id)
+                }
+            }
+        }
+
         $scope.post.units = unitArr;
-   
+
         if ($scope.state == 'add') {
             $http.post(basic_url + '/guest/' + $routeParams.id + '/allocates?' + sortUrl(), $scope.post).success(function (res) {
                 if (res.code == 200) {
                     alert('添加成功')
                     location.reload();
-                }else{
+                } else {
                     alert(res.message);
                 }
             });
@@ -2220,7 +2357,9 @@ app.controller('userAcountsRuleCtr', ['$scope', '$location', 'messageFactory', '
                 if (res.code == 200) {
                     alert('修改成功')
                     location.reload();
-                }else {  alert(res.message);}
+                } else {
+                    alert(res.message);
+                }
             });
         }
 
@@ -2234,10 +2373,8 @@ app.controller('userAcountsRuleCtr', ['$scope', '$location', 'messageFactory', '
     // 分账规则
     $http.get(basic_url + '/guest/' + $routeParams.id + '/allocates/units?' + sortUrl($scope.param)).success(function (res) {
         if (res.code == 200) {
-            $scope.view.rules1 = res.result[1];
-            $scope.view.rules3 = res.result[3];
-            console.log('11111')
-            console.log($scope.view.rules1)
+            $scope.view.rules = res.result;
+
         }
     });
 }]);
@@ -2405,9 +2542,9 @@ app.controller('userAcountsCtr', ['$scope', '$location', 'messageFactory', '$htt
 
             }
         }
-    
-        if ($scope.posts.name && $scope.posts.business && $scope.posts.fixed && $scope.posts.scale && $scope.posts.limit && $scope.posts.actions&&$scope.posts.contractVersion) {
-       
+
+        if ($scope.posts.name && $scope.posts.business && $scope.posts.fixed && $scope.posts.scale && $scope.posts.limit && $scope.posts.actions && $scope.posts.contractVersion) {
+
             $http.post(basic_url + '/guest/' + $routeParams.id + '/allocates/units?' + sortUrl(), $scope.posts).success(function (res) {
                 if (res.code == 200) {
                     alert("操作成功")
@@ -2428,10 +2565,10 @@ app.controller('userAcountsCtr', ['$scope', '$location', 'messageFactory', '$htt
         console.log(message)
 
         $scope.edit = angular.copy(message);
-       
+
         for (var k = 0; k < $scope.set.list.length; k++) {
             var id = $scope.set.list[k].id
-            if ($scope.edit.shops[id]) {
+            if ($scope.edit.shops && $scope.edit.shops[id]) {
                 $scope.set.shops[k] = id
             }
         }
@@ -2439,14 +2576,18 @@ app.controller('userAcountsCtr', ['$scope', '$location', 'messageFactory', '$htt
         if (arr.length == $scope.set.list.length) {
             $scope.set.allShop = true
         }
-        for (var i = 0; i < message.actions.length; i++) {
-            if (message.actions[i] == 'ONLINE') {
-                $scope.set.actions[0] = 'ONLINE'
+        if (message.actions) {
+            for (var i = 0; i < message.actions.length; i++) {
+                if (message.actions[i] == 'ONLINE') {
+                    $scope.set.actions[0] = 'ONLINE'
+                }
+                if (message.actions[i] == 'OFFLINE') {
+                    $scope.set.actions[1] = 'OFFLINE'
+                }
             }
-            if (message.actions[i] == 'OFFLINE') {
-                $scope.set.actions[1] = 'OFFLINE'
-            }
+            ss
         }
+
 
 
     };

@@ -1657,7 +1657,11 @@ function return_append(e, t) {
             '<a href="/useracounts/index.html#/useracounts/'+ e.id +'/'+e.name+ '"><i class="glyphicon glyphicon-edit"></i>分帐管理</a>' +
             '<a href="/brokerage/index.html#/brokerage/'+ e.id +'/'+e.name+ '"><i class="glyphicon glyphicon-edit"></i>手续费管理</a>' +
             '<a href="/order/index.html#/order/'+ e.id +'/'+e.name+ '"><i class="glyphicon glyphicon-edit"></i>坏帐管理</a>' + '<a href="/resources/index.html#/resources/'+ e.id +'/'+e.name+ '"><i class="glyphicon glyphicon-edit"></i>资源管理</a>' +
-            '<a href="/shortmessage/index.html?id=' + e.id +'&name='+e.name+ '"><i class="glyphicon glyphicon-edit"></i>短信管理</a><a href="/admin/index.html#/user/activity?id=' + e.id +'&name='+e.name+ '"><i class="glyphicon glyphicon-edit"></i>活动管理</a><a href="/admin/index.html#/user/shareList?id=' + e.id +'&name='+e.name+ '"><i class="glyphicon glyphicon-edit"></i>分享金管理</a></td></tr>';
+            '<a href="/shortmessage/index.html?id=' + e.id +'&name='+e.name+ '"><i class="glyphicon glyphicon-edit"></i>短信管理</a><a href="/admin/index.html#/user/activity?id=' + e.id +'&name='+e.name+ '"><i class="glyphicon glyphicon-edit"></i>活动管理</a>'+
+            '<a href="/admin/index.html#/user/shareList?id=' + e.id +'&name='+e.name+ '"><i class="glyphicon glyphicon-edit"></i>分享金管理</a>'
+            +
+            '<a href="/admin/index.html#/user/chargeAcount?id=' + e.id +'&name='+e.name+ '"><i class="glyphicon glyphicon-edit"></i>充值帐户</a>'
+            +'</td></tr>';
         return append_text;
     }
     this.key_append = function (t) { //列出所有key

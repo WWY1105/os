@@ -1,0 +1,189 @@
+<div class="col-md-12">
+    <button class="btn btn-primary pull-right" ng-click="addAcount()" style="margin-bottom: 10px;">新增</button>
+    <table class="table table-bordered">
+        <thead>
+            <th>序号</th>
+            <th>业务</th>
+            <th>余额(元)</th>
+            <th>创建时间</th>
+            <th>操作</th>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in view.list.items">
+                <td class="text-center">{{$index+1}}</td>
+                <td ng-bind="filterfn(item.business)"></td>
+                <td class="text-center">{{item.total}}</td>
+                <td class="text-center">{{item.createTime}}</td>
+                <td class="text-center" style="min-width: 200px;">
+                    <button class="btn btn-success" ng-click="seeDetail(item)">查看明细</button>
+                    <button type="button" class="btn btn-danger" ng-click="toCharge(item)">充值
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="col-sm-12" ng-if="view.list.items">
+        <pagination items-per-page="view.list.count" boundary-links="true" total-items="view.list.total"
+            ng-model="view.list.page" class="pagination-sm  pull-right" previous-text="&lsaquo;"
+            ng-change="pageChange()" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+        </pagination>
+    </div>
+
+
+
+    <!-- 新增弹窗 -->
+    <div class="modal" id="dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" ng-click="closeAcount()">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">新增账户</h4>
+                </div>
+                <form class="form-horizontal" name="ruleForm" ng-submit="submitFn()">
+                    <div class="modal-body form-horizontal">
+                        <div class="form-group">
+
+                            <div class="col-sm-12" style="max-height: 260px;overflow: auto">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label>业务</label>
+                                        <select ng-model="targetObj.business" class="form-control"
+                                            ng-options="item.code as item.text for item in types"
+                                            placeholder="请选择业务"></select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label for="">充值金额(元)</label>
+                                        <input type="number" ng-model="targetObj.amount" class="form-control"
+                                            placeholder="大于0,小于10W">
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary click submit"
+                            ng-disabled="ruleForm.$invalid">确认</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal"
+                            ng-click="closeAcount()">取消</button>
+                    </div>
+            </div>
+            </form>
+        </div>
+    </div>
+
+    <!--  充值弹窗 -->
+    <div class="modal" id="dialog_charge" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" ng-click="closeCharge()">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">充值</h4>
+                </div>
+                <form class="form-horizontal" name="ruleForm" ng-submit="submitChargeFn()">
+                    <div class="modal-body form-horizontal">
+                        <div class="form-group">
+
+                            <div class="col-sm-12" style="max-height: 260px;overflow: auto">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label>账户业务:</label>
+                                        <span ng-bind="filterfn(editObj.business)"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label for="">账户余额</label>
+                                        <span>{{editObj.total}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label for="">创建时间</label>
+                                        <span> {{editObj.createTime}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label for="">充值金额(元)</label>
+                                        <input type="number" ng-model="editObj.amount" class="form-control"
+                                            placeholder="大于0,小于10W">
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary click submit"
+                            ng-disabled="ruleForm.$invalid">确认</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal"
+                            ng-click="closeCharge()">取消</button>
+                    </div>
+            </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 查看明细 -->
+    <div class="modal" id="dialogDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" ng-click="closeDetail()">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">充值明细</h4>
+                </div>
+                <form class="form-horizontal" name="ruleForm" >
+                    <div class="modal-body form-horizontal">
+                        <table class="table table-bordered">
+                            <thead>
+                                <th>序号</th>
+                                <th>门店</th>
+                                <th>原因</th>
+                                <th>金额(元)</th>
+                                <th>时间</th>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in detailObj.items">
+                                    <td class="text-center">{{$index+1}}</td>
+                                    <td class="text-center">{{item.shopName||'无'}}</td>
+                                    <td class="text-center">{{item.cause}}</td>
+                                    <td class="text-center">{{item.amount}}</td>
+                                    <td class="text-center">{{item.createTime}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="col-sm-12" ng-if="detailObj.items">
+                            <pagination items-per-page="detailObj.count" boundary-links="true" total-items="detailObj.total"
+                                ng-model="detailObj.page" class="pagination-sm  pull-right" previous-text="&lsaquo;"
+                                ng-change="pageChange()" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+                            </pagination>
+                        </div>
+                    </div>
+                   
+                    <div class="modal-footer">
+                        <button class="btn btn-primary click submit"
+                        ng-click="closeDetail()">确认</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal"
+                            ng-click="closeDetail()">取消</button>
+                    </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
