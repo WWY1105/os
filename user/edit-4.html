@@ -201,7 +201,7 @@
                     json.slogan = $("#slogan").val();
                     var datas = ajax_send(json, "/guest/" + getUrl.id + "/brand", sendFn);
                     if (datas.code == 200) {
-                        alert(成功);
+                        alert('成功');
                         location.href = index_url + "/user/view-4.html?id=" + getUrl.id;
                     } else alert(datas.message);
                 } else { //
